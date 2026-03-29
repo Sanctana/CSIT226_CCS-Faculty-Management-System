@@ -48,10 +48,12 @@ body {
 }
 
 .logo .gear {
-    width: 32px; /* Adjusted size slightly for better visibility */
+    width: 32px;
+    /* Adjusted size slightly for better visibility */
     height: 32px;
     background-image: url("/assets/img/cit-u.png");
-    background-size: contain; /* This makes the image fit the box */
+    background-size: contain;
+    /* This makes the image fit the box */
     background-repeat: no-repeat;
     background-position: center;
     display: inline-block;
