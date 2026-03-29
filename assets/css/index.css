@@ -1,0 +1,180 @@
+:root {
+    --accent: #f47b20;
+    --accent-2: #f7a86b;
+    --muted: #f7f3f0;
+    --text: #111;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', system-ui, Arial, sans-serif;
+    color: var(--text);
+}
+
+body {
+    background-image: url("/assets/img/Wildcat-Innovation-Labs-01.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.wrap {
+    min-height: 100vh;
+    display: flex;
+}
+
+
+/*right login*/
+.hero {
+    flex: 1;
+    padding: 64px 72px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #222;
+    margin-bottom: 24px
+}
+
+.logo .gear {
+    width: 32px; /* Adjusted size slightly for better visibility */
+    height: 32px;
+    background-image: url("/assets/img/cit-u.png");
+    background-size: contain; /* This makes the image fit the box */
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
+}
+
+h1 {
+    font-size: 64px;
+    line-height: 0.95;
+    margin: 0 0 18px;
+    font-weight: 800
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #444;
+    margin-bottom: 36px
+}
+
+.lead {
+    max-width: 640px;
+    color: #333;
+    border-left: 4px solid #222;
+    padding-left: 18px;
+    font-size: 15px
+}
+
+.auth {
+    width: 530px;
+    padding: 56px;
+    background: linear-gradient(180deg, var(--accent-2), #f6caa4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch
+}
+
+.auth h2 {
+    margin: 0 0 8px;
+    font-size: 32px
+}
+
+.auth p.lead {
+    font-size: 14px;
+    color: #2b2b2b;
+    margin: 0 0 20px
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    gap: 6px
+}
+
+label {
+    font-size: 13px;
+    color: #2b2b2b
+}
+
+input[type="email"],
+input[type="password"] {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    outline: none;
+    font-size: 15px
+}
+
+input:focus {
+    border-color: rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px
+}
+
+.btn {
+    background: var(--accent);
+    color: white;
+    padding: 12px;
+    border-radius: 28px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px
+}
+
+.btn:active {
+    transform: translateY(1px)
+}
+
+/* Responsive */
+@media (max-width:980px) {
+    .wrap {
+        flex-direction: column
+    }
+
+    .auth {
+        width: 100%;
+        padding: 36px
+    }
+
+    h1 {
+        font-size: 44px
+    }
+
+    .hero {
+        padding: 36px
+    }
+}
