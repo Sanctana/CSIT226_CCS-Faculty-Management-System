@@ -37,9 +37,9 @@
             </div>
             <div class="row">
                 <label class="remember"><input type="checkbox"> Remember Me</label>
-                <a href="#" style="color:#3b2b1f;text-decoration:none;font-size:14px">Need help logging in?</a>
+                <a href="registerfaculty.php" style="color:#3b2b1f;text-decoration:none;font-size:14px">Need help logging in?</a>
             </div>
-            <button class="btn" type="submit">Log In</button>
+            <button class="btn" type="submit"><a href="registerfaculty.php">Log In</a></button>
         </form>
     </aside>
 </div>
