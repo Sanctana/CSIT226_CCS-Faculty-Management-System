@@ -58,8 +58,10 @@
                     <p>Here is what's happening in your department today.</p>
                 </div>
                 <div class="quick-actions">
-                    <button class="action-btn btn-primary"> + Add New Faculty</button>
-                    <button class="action-btn btn-primary"> + Assign New Load</button>
+                    <div class="quick-actions">
+                        <a href="registerfaculty.php" class="action-btn btn-primary">+ Add New Faculty</a>
+                        <a href="registerload.php" class="action-btn btn-primary">+ Assign New Load</a>
+                    </div>
                 </div>
             </div>
 

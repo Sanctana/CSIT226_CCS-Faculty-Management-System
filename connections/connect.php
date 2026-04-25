@@ -1,5 +1,5 @@
 <?php 
-	$connection = new mysqli('localhost', 'root','','css_faculty_system_db');
+	$connection = new mysqli('localhost', 'root','','dbccsfacultysystem');
 	
 	if (!$connection){
 		die (mysqli_error($mysqli));

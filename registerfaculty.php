@@ -1,10 +1,7 @@
 <?php
 include 'connections/connect.php';
-// require_once 'assets/includes/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -235,19 +232,19 @@ if(isset($_POST['btnRegister'])){
     $lastname=$_POST['txtlastname'];
     $birthdate=$_POST['txtbirth'];
     $gender=$_POST['txtgender'];
-    $institutional_email=$_POST['txtinstitutionalemail'];
-    $contact_number=$_POST['txtcontact'];
+    $email=$_POST['txtinstitutionalemail'];
+    $contactnumber=$_POST['txtcontact'];
     $password = password_hash($_POST['txtpassword'], PASSWORD_DEFAULT);
 
     // if walay value (value="") undefined/null, kay iyahang i return kay empty string - right
-    $employee_status = $_POST['txtemployeestatus'] ?? '';
+    $employeestatus = $_POST['txtemployeestatus'] ?? '';
 
     //for tblfaculty
     $specialization=$_POST['txtspecialization'];
 
     //save data to tbluser
-    $sql1 ="Insert into tbluser(firstname,lastname,birthdate,gender,institutional_email,contact_number,password,employee_status)
-    values('".$firstname."','".$lastname."','".$birthdate."','".$gender."','".$institutional_email."','".$contact_number."','".$password."','".$employee_status."')";
+    $sql1 ="Insert into tbluser(firstname,lastname,birthdate,gender,email,contactnumber,password,employeestatus)
+    values('".$firstname."','".$lastname."','".$birthdate."','".$gender."','".$email."','".$contactnumber."','".$password."','".$employeestatus."')";
 
 //    $sql1 ="Insert into tblstudent(firstname,lastname,program,yearlevel) values('".$fname."','".$lname."','".$program."',".$yearlevel.")";
     mysqli_query($connection,$sql1);
@@ -255,20 +252,18 @@ if(isset($_POST['btnRegister'])){
     $last_id = $connection->insert_id; // makuha ang last id, after insert data,
 
     //save data to tblfaculty
-    $sql1 ="Insert into tblfaculty(user_id,specialization) values(".$last_id.",'".$specialization."')";
+    $sql1 ="Insert into tblfaculty(id,specialization) values(".$last_id.",'".$specialization."')";
 
     mysqli_query($connection,$sql1);
 
     echo "<script language='javascript'>
 			alert('New record saved.');
 		      </script>";
-    header("location: facultyrecord.php");
-
-
+    //header("location: facultyrecord.php");
 
 }
 
 ?>
 
 
-<?php require_once 'assets/includes/footer.php'; ?>
+<?php //require_once 'assets/includes/footer.php'; ?>
