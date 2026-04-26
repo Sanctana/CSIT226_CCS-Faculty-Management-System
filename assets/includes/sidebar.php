@@ -3,14 +3,6 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCS | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/sidebar.css">
-</head>
-
 <aside class="sidebar">
     <div class="logo-area"><img src="assets/img/ccs_logo.png" alt="CCS Logo" class="logo-img">CCS Hub</div>
     <div class="nav-section">

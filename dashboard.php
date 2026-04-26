@@ -1,28 +1,27 @@
 <?php
     include 'connections/connect.php';
-    require_once 'assets/includes/sidebar.php';
-
     $pageTitle = "Dashboard";
 ?>
 
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <title>CCS | Dashboard</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="/assets/css/variables.css">
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
-    <link rel="stylesheet" href="/assets/css/components.css">
-
-    <script src="assets/js/dashboard.js"></script>
-
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/topbar.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <script src="assets/js/dashboard.js" defer></script>
+</head>
+<body>
+<?php require_once 'assets/includes/sidebar.php'; ?>
 
 <div class="main-wrapper">
-    <?php  require_once 'assets/includes/topbar.php'; ?>
+    <?php require_once 'assets/includes/topbar.php'; ?>
     <!-- body content -->
     <main class="content-body">
         <div class="container">
@@ -154,3 +153,5 @@
         </div>
     </main>
 </div>
+</body>
+</html>
