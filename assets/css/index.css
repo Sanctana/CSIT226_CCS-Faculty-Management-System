@@ -1,3 +1,4 @@
+/* root variables */
 :root {
     --accent: #f47b20;
     --accent-2: #f7a86b;
@@ -5,10 +6,12 @@
     --text: #111;
 }
 
+/* base reset */
 * {
     box-sizing: border-box
 }
 
+/* page setup */
 html,
 body {
     height: 100%;
@@ -17,19 +20,20 @@ body {
     color: var(--text);
 }
 
+/* background image */
 body {
     background-image: url("/assets/img/Wildcat-Innovation-Labs-01.jpg");
     background-size: cover;
     background-position: center;
 }
 
+/* main layout wrapper */
 .wrap {
     min-height: 100vh;
     display: flex;
 }
 
-
-/*right login*/
+/* hero section */
 .hero {
     flex: 1;
     padding: 64px 72px;
@@ -39,6 +43,7 @@ body {
     justify-content: center;
 }
 
+/* logo */
 .logo {
     display: flex;
     align-items: center;
@@ -47,18 +52,18 @@ body {
     margin-bottom: 24px
 }
 
+/* logo icon */
 .logo .gear {
     width: 32px;
-    /* Adjusted size slightly for better visibility */
     height: 32px;
     background-image: url("/assets/img/cit-u.png");
     background-size: contain;
-    /* This makes the image fit the box */
     background-repeat: no-repeat;
     background-position: center;
     display: inline-block;
 }
 
+/* main title */
 h1 {
     font-size: 64px;
     line-height: 0.95;
@@ -66,12 +71,14 @@ h1 {
     font-weight: 800
 }
 
+/* subtitle text */
 .subtitle {
     font-size: 20px;
     color: #444;
     margin-bottom: 36px
 }
 
+/* description text */
 .lead {
     max-width: 640px;
     color: #333;
@@ -80,6 +87,7 @@ h1 {
     font-size: 15px
 }
 
+/* auth panel */
 .auth {
     width: 530px;
     padding: 56px;
@@ -90,34 +98,40 @@ h1 {
     align-items: stretch
 }
 
+/* auth title */
 .auth h2 {
     margin: 0 0 8px;
     font-size: 32px
 }
 
+/* auth subtitle */
 .auth p.lead {
     font-size: 14px;
     color: #2b2b2b;
     margin: 0 0 20px
 }
 
+/* form layout */
 .form {
     display: flex;
     flex-direction: column;
     gap: 16px
 }
 
+/* input group */
 .input {
     display: flex;
     flex-direction: column;
     gap: 6px
 }
 
+/* label */
 label {
     font-size: 13px;
     color: #2b2b2b
 }
 
+/* input fields */
 input[type="email"],
 input[type="password"] {
     padding: 12px 14px;
@@ -127,11 +141,13 @@ input[type="password"] {
     font-size: 15px
 }
 
+/* input focus */
 input:focus {
     border-color: rgba(0, 0, 0, 0.18);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
 }
 
+/* row layout */
 .row {
     display: flex;
     align-items: center;
@@ -139,6 +155,7 @@ input:focus {
     margin-top: 8px
 }
 
+/* remember checkbox */
 .remember {
     display: flex;
     align-items: center;
@@ -146,6 +163,7 @@ input:focus {
     font-size: 14px
 }
 
+/* button */
 .btn {
     background: var(--accent);
     color: white;
@@ -157,11 +175,12 @@ input:focus {
     margin-top: 12px
 }
 
+/* button click effect */
 .btn:active {
     transform: translateY(1px)
 }
 
-/* Responsive */
+/* responsive design */
 @media (max-width:980px) {
     .wrap {
         flex-direction: column

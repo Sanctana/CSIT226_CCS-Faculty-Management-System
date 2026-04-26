@@ -1,0 +1,17 @@
+/* root for clean code, i call2 rani siya sa other attributes */
+:root {
+    --primary: #f47b20;
+    --primary-soft: #fff5ee;
+    --primary-grad: linear-gradient(135deg, #ff9e67, #f47b20);
+
+    /* for soft gradient sa stats */
+    --stat-grad: linear-gradient(135deg, #fffaf5 0%, #fff0e6 100%);
+    --bg-workspace: #fcfaf8;
+    --bg-topbar: #ffffff;
+    --bg-sidebar: #ffffff;
+    --text-dark: #2d1a12;
+    --text-muted: #7c6d67;
+    --border-orange: rgba(244, 123, 32, 0.25);
+    --border-light: #f1edea;
+    --shadow-sm: 0 4px 12px rgba(244, 123, 32, 0.05);
+}

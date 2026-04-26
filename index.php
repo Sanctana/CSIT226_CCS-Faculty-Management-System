@@ -1,15 +1,17 @@
 <?php
+    include 'connections/connect.php';
 ?>
-<!doctype html>
-<html lang="en">
 
-<head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
+
     <title>Faculty Workload Management System</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/index.css">
-</head>
+
 
 <body>
 <div class="wrap">
@@ -39,10 +41,7 @@
                 <label class="remember"><input type="checkbox"> Remember Me</label>
                 <a href="registerfaculty.php" style="color:#3b2b1f;text-decoration:none;font-size:14px">Need help logging in?</a>
             </div>
-            <button class="btn" type="submit"><a href="registerfaculty.php">Log In</a></button>
+            <button class="btn" type="submit"><a href="dashboard.php">Log In</a></button>
         </form>
     </aside>
 </div>
-</body>
-
-</html>

@@ -1,5 +1,9 @@
 <?php
 include 'connections/connect.php';
+require_once 'assets/includes/sidebar.php';
+
+$pageTitle = "Register Faculty";
+
 if (isset($_POST['btnRegister'])) {
     //retrieve data from form and save the value to a variable
     //for tbluser
@@ -34,157 +38,41 @@ if (isset($_POST['btnRegister'])) {
     echo "<script language='javascript'>
 			alert('New record saved.');
 		      </script>";
-    header("location: facultyrecord.php");
+    header("location: managementfaculty.php");
     exit();
 }
 ?>
 
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>CCS | Faculty Registration</title>
+
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
-    <style>
-        /* form-specific styling */
-        .form-panel {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            border: 1px solid var(--border-orange);
-            padding: 40px;
-            box-shadow: var(--shadow-sm);
-        }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/topbar.css">
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/formtemplate.css">
 
-        .form-header h2 {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -1px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input,
-        .form-select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: var(--text-dark);
-            background: #fafaf9;
-            transition: 0.2s;
-        }
-
-        .form-input:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(244, 123, 32, 0.1);
-        }
-
-        .form-submit {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary-grad);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 16px;
-            box-shadow: 0 4px 12px rgba(244, 123, 32, 0.2);
-        }
-
-        .form-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(244, 123, 32, 0.3);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- my sidebar <3 -->
-    <aside class="sidebar">
-        <div class="logo-area"><img src="assets/img/ccs_logo.png" alt="FWMS Logo" class="logo-img">CCS AcadHub</div>
-        <div class="nav-section">
-            <div class="nav-label">Menu</div>
-            <a href="dashboard.php" class="nav-item">Dashboard</a>
-            <a href="facultyrecord.php" class="nav-item">Faculty Members</a>
-            <a href="#" class="nav-item">Workload Assignment</a>
-        </div>
-        <div class="nav-section">
-            <div class="nav-label">Curriculum</div>
-            <a href="#" class="nav-item">Course Catalog</a>
-            <a href="#" class="nav-item">Schedules</a>
-        </div>
-        <div style="margin-top: auto; padding: 24px; border-top: 1px solid var(--border-light);">
-            <a href="#" class="nav-item" style="color: #cf1322;">Logout</a>
-        </div>
-    </aside>
 
     <div class="main-wrapper">
-        <!-- top bar -->
-        <header class="top-bar">
-            <div class="breadcrumb">Academic Management / <span>Faculty Registration</span></div>
-            <div class="header-right-group">
-                <div class="semester-pill">
-                    <div class="live-dot"></div>2nd Semester, AY 2023-2024
-                </div>
-                <div class="profile-trigger">
-                    <div class="user-text">
-                        <span class="user-name">Cherry Lyn Sta. Romana</span>
-                        <span class="user-role">CS Department Head</span>
-                    </div>
-                    <div class="avatar" style="background: url('https://ui-avatars.com/api/?name=Cherry+Sta+Romana&background=f47b20&color=fff'); background-size: cover;"></div>
-                </div>
-            </div>
-        </header>
+       <?php require_once 'assets/includes/topbar.php'; ?>
 
         <!-- body content -->
         <main class="content-body">
             <div class="container">
                 <div class="form-panel">
                     <div class="form-header">
-                        <h2>Faculty Registration Page</h2>
+                        <a href="managementfaculty.php" class="back-icon">
+                            <img src="assets/img/back.png" alt="Back">
+                        </a>
+                        <h2>Faculty Registration</h2>
                     </div>
+
+                    <div class="form-divider"></div>
 
                     <form method="post">
                         <div class="form-grid">
@@ -259,6 +147,4 @@ if (isset($_POST['btnRegister'])) {
             </div>
         </main>
     </div>
-</body>
-</html>
 

@@ -1,53 +1,28 @@
 <?php
+    include 'connections/connect.php';
+    require_once 'assets/includes/sidebar.php';
+
+    $pageTitle = "Dashboard";
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCS | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
-    <script src="assets/js/dashboard.js"></script>
-</head>
-<body>
 
-<!-- my sidebar <3 -->
-<aside class="sidebar">
-    <div class="logo-area"><img src="assets/img/ccs_logo.png" alt="FWMS Logo" class="logo-img">CCS AcadHub</div>
-    <div class="nav-section">
-        <div class="nav-label">Menu</div>
-        <a href="#" class="nav-item active">Dashboard</a>
-        <a href="#" class="nav-item">Faculty Members</a>
-        <a href="#" class="nav-item">Workload Assignment</a>
-    </div>
-    <div class="nav-section">
-        <div class="nav-label">Curriculum</div>
-        <a href="#" class="nav-item">Course Catalog</a>
-        <a href="#" class="nav-item">Schedules</a>
-    </div>
-    <div style="margin-top: auto; padding: 24px; border-top: 1px solid var(--border-light);">
-        <a href="#" class="nav-item" style="color: #cf1322;">Logout</a>
-    </div>
-</aside>
+
+    <title>CCS | Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/assets/css/variables.css">
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+
+    <script src="assets/js/dashboard.js"></script>
+
 
 <div class="main-wrapper">
-    <!-- top bar -->
-    <header class="top-bar">
-        <div class="breadcrumb">Academic Management / <span>Dashboard</span></div>
-        <div class="header-right-group">
-            <div class="semester-pill"><div class="live-dot"></div>2nd Semester, AY 2023-2024</div>
-            <div class="profile-trigger">
-                <div class="user-text">
-                    <span class="user-name">Cherry Lyn Sta. Romana</span>
-                    <span class="user-role">CS Department Head</span>
-                </div>
-                <div class="avatar" style="background: url('https://ui-avatars.com/api/?name=Cherry+Sta+Romana&background=f47b20&color=fff'); background-size: cover;"></div>
-            </div>
-        </div>
-    </header>
-
+    <?php  require_once 'assets/includes/topbar.php'; ?>
     <!-- body content -->
     <main class="content-body">
         <div class="container">
@@ -59,8 +34,8 @@
                 </div>
                 <div class="quick-actions">
                     <div class="quick-actions">
-                        <a href="registerfaculty.php" class="action-btn btn-primary">+ Add New Faculty</a>
-                        <a href="registerload.php" class="action-btn btn-primary">+ Assign New Load</a>
+                        <a href="registerfaculty.php" class="action-btn btn-primary" style="text-decoration: none;">+ Add New Faculty</a>
+                        <a href="registerload.php" class="action-btn btn-primary" style="text-decoration: none;">+ Assign New Load</a>
                     </div>
                 </div>
             </div>
@@ -76,7 +51,7 @@
                             <span class="tag tag-o">2 Dept. Heads</span>
                             <span class="tag tag-b">30 Faculty</span>
                         </div>
-                        <button class="view-btn">View</button>
+                        <a href="managementfaculty.php" class="view-btn" style="text-decoration: none;">View</a>
                     </div>
                 </div>
 
@@ -86,7 +61,7 @@
 
                     <div class="stat-bottom">
                         <p class="stat-desc" style="color:#16a34a;">2 New Courses Added</p>
-                        <button class="view-btn">View</button>
+                        <a href="managementcourse.php" class="view-btn" style="text-decoration: none;">View</a>
                     </div>
                 </div>
 
@@ -96,7 +71,7 @@
 
                     <div class="stat-bottom">
                         <p class="stat-desc">Across 4 Year Levels</p>
-                        <button class="view-btn">View</button>
+                        <a href="managementsection.php" class="view-btn" style="text-decoration: none;">View</a>
                     </div>
                 </div>
             </div>
@@ -179,5 +154,3 @@
         </div>
     </main>
 </div>
-</body>
-</html>

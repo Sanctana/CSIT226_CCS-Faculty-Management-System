@@ -1,0 +1,83 @@
+/* top bar */
+.top-bar {
+    height: 72px;
+    background: linear-gradient(to right, #ffffff 0%, #f3eae0 100%);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.breadcrumb span {
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+.header-right-group {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.semester-pill {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #166534;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.user-text {
+    text-align: right;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: block;
+}
+
+.user-role {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: block;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #eee;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+}
