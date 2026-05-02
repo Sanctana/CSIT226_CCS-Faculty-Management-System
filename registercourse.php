@@ -5,11 +5,34 @@
     $pageTitle = "Register Course";
 ?>
 
+<!--insert registered course data into db -->
+<?php
+    // checks if form is submitted
+    if(isset($_POST['btnRegister'])) {
+        // removes whitespace and makes values safe for SQL
+        $coursecode = mysqli_real_escape_string($connection, trim($_POST['coursecode']));
+        $coursetitle = mysqli_real_escape_string($connection, trim($_POST['coursetitle']));
+        $units = (int) $_POST['units']; // int for units
+
+        // perform sql insert
+        $sql = "INSERT INTO tblcourse(coursecode, coursetitle, units) VALUES
+                ('$coursecode', '$coursetitle', '$units')";
+        
+        // insert registered data to db and check
+        if(mysqli_query($connection, $sql)) {
+            header("Location: managementcourse.php");
+            exit();
+        } else {
+            $error = "Failed to save course: " .mysqli_error($connection);
+        }
+    }
+?>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CCS | Section Registration</title>
+    <title>CCS | Course Registration</title>
 
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">

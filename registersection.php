@@ -5,6 +5,30 @@
     $pageTitle = "Register Section";
 ?>
 
+<!-- save section info to DB-->
+<?php
+    if (isset($_POST['btnRegister'])) {
+        $sectionname = mysqli_real_escape_string($connection, trim($_POST['sectionname']));
+        $yearlevel = (int) $_POST['yearlevel'];
+        $programid = (int) $_POST['programid']; // based on dropdown option values
+
+        $sql = "INSERT INTO tblsection (sectionname, yearlevel, programid) VALUES
+                ('$sectionname', $yearlevel, $programid)";
+        
+        if (mysqli_query($connection, $sql)) {
+            header("Location: managementsection.php");
+            exit();
+        } else {
+            $error = "Failed to save section: " . mysqli_error($connection);
+        }
+    }
+
+?>
+
+
+
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -55,11 +79,19 @@
                         </div>
 
                         <div class="form-group">
+
+                            <!--Reworked Program Form to show all programs within tblprogram (feel free to change kung hassle ra kaayo)  -->
                             <label class="form-label">Program</label>
-                            <select name="program" class="form-select" required>
-                                <option value="">Select Program</option>
-                                <option value="CS">BSCS</option>
-                                <option value="IT">BSIT</option>
+
+                            <!-- uses programid instead to display program names based on program ID (more efficient but can be reverted back if too much na) -->
+                            <select name="programid" class="form-select" required>
+                                <?php
+                                    $result = mysqli_query($connection, "SELECT programid, programname FROM tblprogram");
+                                    while($row = mysqli_fetch_assoc($result)) {
+                                        echo "<option value = '{$row['programid']}'>
+                                        {$row['programname']}</option>";
+                                    }
+                                ?>
                             </select>
                         </div>
                     </div>

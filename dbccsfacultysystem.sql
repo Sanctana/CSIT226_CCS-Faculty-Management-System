@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2026 at 07:34 AM
+-- Generation Time: May 02, 2026 at 04:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,9 +30,17 @@ SET time_zone = "+00:00";
 CREATE TABLE `tblcourse` (
   `coursecodeid` int(11) NOT NULL,
   `coursetitle` varchar(50) NOT NULL,
-  `lectureunits` int(2) NOT NULL,
-  `labunits` int(2) NOT NULL
+  `coursecode` varchar(50) NOT NULL,
+  `units` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tblcourse`
+--
+
+INSERT INTO `tblcourse` (`coursecodeid`, `coursetitle`, `coursecode`, `units`) VALUES
+(3, 'Title', 'Code123', 23),
+(5, 'Title', 'Code234', 34);
 
 -- --------------------------------------------------------
 
@@ -94,9 +102,7 @@ INSERT INTO `tblfaculty` (`id`, `specialization`) VALUES
 (1, '1'),
 (3, '4'),
 (6, '2'),
-(9, '1'),
-(10, '2'),
-(11, '1');
+(13, '1');
 
 -- --------------------------------------------------------
 
@@ -105,8 +111,17 @@ INSERT INTO `tblfaculty` (`id`, `specialization`) VALUES
 --
 
 CREATE TABLE `tblprogram` (
+  `programid` int(11) NOT NULL,
   `programname` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tblprogram`
+--
+
+INSERT INTO `tblprogram` (`programid`, `programname`) VALUES
+(1, 'BSCS'),
+(2, 'BSIT');
 
 -- --------------------------------------------------------
 
@@ -115,8 +130,18 @@ CREATE TABLE `tblprogram` (
 --
 
 CREATE TABLE `tblsection` (
-  `sectionname` varchar(50) NOT NULL
+  `sectionid` int(11) NOT NULL,
+  `sectionname` varchar(50) NOT NULL,
+  `yearlevel` int(11) NOT NULL,
+  `programid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tblsection`
+--
+
+INSERT INTO `tblsection` (`sectionid`, `sectionname`, `yearlevel`, `programid`) VALUES
+(1, 'S69', 3, 2);
 
 -- --------------------------------------------------------
 
@@ -128,8 +153,7 @@ CREATE TABLE `tblteachingassignment` (
   `assignmentid` int(11) NOT NULL,
   `schoolyear` varchar(9) NOT NULL,
   `section` varchar(50) NOT NULL,
-  `coursecodeid` int(11) NOT NULL,
-  `sectionname` varchar(50) NOT NULL
+  `coursecodeid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -158,9 +182,7 @@ INSERT INTO `tbluser` (`id`, `firstname`, `lastname`, `birthdate`, `gender`, `em
 (1, 'Joel Theo', 'Gallardo', '2026-07-15', 'M', 'joeltheo.gallardo@cit.edu', '09123456789', '$2y$10$8arqDZp3PNWCg0KcbVCZoO056UwMFYQALLQ2g.pU7mOFUROdCRrCu', 'PT'),
 (3, 'Saint Tria', 'Tangpos', '2005-11-02', 'M', 'sainttria.tangpos@cit.edu', '09123456789', '$2y$10$698fzipaJYNEKZdHt693ouIG2tDH4urdKpYR49es8i6iH7tzCrwta', 'FT'),
 (6, 'James Kenneth', 'Acabal', '2004-06-19', 'M', 'jameskenneth.acabal@cit.edu', '09123456789', '$2y$10$JDpitA7cbdSUH.Mjn7M8DuYYf2vFcap8GrA4sOzMTceTEJPUKsGhK', 'PT'),
-(9, 'firstname', 'lastname', '1972-02-29', 'M', 'email@email.com', '12309123129', '$2y$10$ESnX8p65L6jSyn.6Qre/MuETIaBEg7rvPJ/nchZIsn/EEUx5AoZly', 'PT'),
-(10, 'adfadf', 'adfadfadf', '2026-04-02', 'F', 'email@email.com', '23423423423', '$2y$10$TXP/9DKsoMNfqEEfQSLlbODhDgRwCxSUGDMt4q9SXH6kQnY7KqVia', 'PT'),
-(11, '1', '2', '2026-04-26', 'F', 'email@email.com', '12312312312', '$2y$10$RLqRnH7RMKgbkx3H5ntecuMl0k621M.jxCNvW/IsX1qn7t7rHg9Gy', 'PT');
+(13, 'name', 'last', '2026-05-01', 'M', 'email@email.com', '123', '$2y$10$y7HVieZwS7.XTGEdK9BBTuw7uWX4TJVUa3rpZnqRYysu98kibNWya', 'PT');
 
 --
 -- Indexes for dumped tables
@@ -170,7 +192,9 @@ INSERT INTO `tbluser` (`id`, `firstname`, `lastname`, `birthdate`, `gender`, `em
 -- Indexes for table `tblcourse`
 --
 ALTER TABLE `tblcourse`
-  ADD PRIMARY KEY (`coursecodeid`);
+  ADD PRIMARY KEY (`coursecodeid`),
+  ADD UNIQUE KEY `coursecode_2` (`coursecode`),
+  ADD KEY `coursecode` (`coursecode`);
 
 --
 -- Indexes for table `tblcourseschedule`
@@ -198,18 +222,23 @@ ALTER TABLE `tblfaculty`
   ADD KEY `fk_faculty_user_id_user` (`id`);
 
 --
+-- Indexes for table `tblprogram`
+--
+ALTER TABLE `tblprogram`
+  ADD PRIMARY KEY (`programid`);
+
+--
 -- Indexes for table `tblsection`
 --
 ALTER TABLE `tblsection`
-  ADD PRIMARY KEY (`sectionname`);
+  ADD PRIMARY KEY (`sectionid`);
 
 --
 -- Indexes for table `tblteachingassignment`
 --
 ALTER TABLE `tblteachingassignment`
   ADD PRIMARY KEY (`assignmentid`),
-  ADD KEY `fk_teachingassignment_coursecodeid_course` (`coursecodeid`),
-  ADD KEY `fk_teachingassignment_sectionname_section` (`sectionname`);
+  ADD KEY `fk_teachingassignment_coursecodeid_course` (`coursecodeid`);
 
 --
 -- Indexes for table `tbluser`
@@ -220,6 +249,12 @@ ALTER TABLE `tbluser`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `tblcourse`
+--
+ALTER TABLE `tblcourse`
+  MODIFY `coursecodeid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tblcourseschedule`
@@ -234,10 +269,22 @@ ALTER TABLE `tbleducation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tblprogram`
+--
+ALTER TABLE `tblprogram`
+  MODIFY `programid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `tblsection`
+--
+ALTER TABLE `tblsection`
+  MODIFY `sectionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -265,8 +312,7 @@ ALTER TABLE `tblfaculty`
 -- Constraints for table `tblteachingassignment`
 --
 ALTER TABLE `tblteachingassignment`
-  ADD CONSTRAINT `fk_teachingassignment_coursecodeid_course` FOREIGN KEY (`coursecodeid`) REFERENCES `tblcourse` (`coursecodeid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_teachingassignment_sectionname_section` FOREIGN KEY (`sectionname`) REFERENCES `tblsection` (`sectionname`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_teachingassignment_coursecodeid_course` FOREIGN KEY (`coursecodeid`) REFERENCES `tblcourse` (`coursecodeid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
