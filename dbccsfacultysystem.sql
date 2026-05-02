@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2026 at 03:07 PM
+-- Generation Time: May 02, 2026 at 07:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -64,6 +64,20 @@ CREATE TABLE `tbldepartmenthead` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbleducation`
+--
+
+CREATE TABLE `tbleducation` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `degree` varchar(50) NOT NULL,
+  `school` varchar(50) NOT NULL,
+  `year_graduated` year(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tblfaculty`
 --
 
@@ -79,7 +93,10 @@ CREATE TABLE `tblfaculty` (
 INSERT INTO `tblfaculty` (`id`, `specialization`) VALUES
 (1, '1'),
 (3, '4'),
-(6, '2');
+(6, '2'),
+(9, '1'),
+(10, '2'),
+(11, '1');
 
 -- --------------------------------------------------------
 
@@ -140,7 +157,10 @@ CREATE TABLE `tbluser` (
 INSERT INTO `tbluser` (`id`, `firstname`, `lastname`, `birthdate`, `gender`, `email`, `contactnumber`, `password`, `employeestatus`) VALUES
 (1, 'Joel Theo', 'Gallardo', '2026-07-15', 'M', 'joeltheo.gallardo@cit.edu', '09123456789', '$2y$10$8arqDZp3PNWCg0KcbVCZoO056UwMFYQALLQ2g.pU7mOFUROdCRrCu', 'PT'),
 (3, 'Saint Tria', 'Tangpos', '2005-11-02', 'M', 'sainttria.tangpos@cit.edu', '09123456789', '$2y$10$698fzipaJYNEKZdHt693ouIG2tDH4urdKpYR49es8i6iH7tzCrwta', 'FT'),
-(6, 'James Kenneth', 'Acabal', '2004-06-19', 'M', 'jameskenneth.acabal@cit.edu', '09123456789', '$2y$10$JDpitA7cbdSUH.Mjn7M8DuYYf2vFcap8GrA4sOzMTceTEJPUKsGhK', 'PT');
+(6, 'James Kenneth', 'Acabal', '2004-06-19', 'M', 'jameskenneth.acabal@cit.edu', '09123456789', '$2y$10$JDpitA7cbdSUH.Mjn7M8DuYYf2vFcap8GrA4sOzMTceTEJPUKsGhK', 'PT'),
+(9, 'firstname', 'lastname', '1972-02-29', 'M', 'email@email.com', '12309123129', '$2y$10$ESnX8p65L6jSyn.6Qre/MuETIaBEg7rvPJ/nchZIsn/EEUx5AoZly', 'PT'),
+(10, 'adfadf', 'adfadfadf', '2026-04-02', 'F', 'email@email.com', '23423423423', '$2y$10$TXP/9DKsoMNfqEEfQSLlbODhDgRwCxSUGDMt4q9SXH6kQnY7KqVia', 'PT'),
+(11, '1', '2', '2026-04-26', 'F', 'email@email.com', '12312312312', '$2y$10$RLqRnH7RMKgbkx3H5ntecuMl0k621M.jxCNvW/IsX1qn7t7rHg9Gy', 'PT');
 
 --
 -- Indexes for dumped tables
@@ -163,6 +183,13 @@ ALTER TABLE `tblcourseschedule`
 --
 ALTER TABLE `tbldepartmenthead`
   ADD KEY `fk_dept_head_id_user` (`id`);
+
+--
+-- Indexes for table `tbleducation`
+--
+ALTER TABLE `tbleducation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_education_id_user` (`user_id`);
 
 --
 -- Indexes for table `tblfaculty`
@@ -201,10 +228,16 @@ ALTER TABLE `tblcourseschedule`
   MODIFY `scheduleid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbleducation`
+--
+ALTER TABLE `tbleducation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
@@ -215,6 +248,12 @@ ALTER TABLE `tbluser`
 --
 ALTER TABLE `tbldepartmenthead`
   ADD CONSTRAINT `fk_dept_head_id_user` FOREIGN KEY (`id`) REFERENCES `tbluser` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tbleducation`
+--
+ALTER TABLE `tbleducation`
+  ADD CONSTRAINT `fk_education_id_user` FOREIGN KEY (`user_id`) REFERENCES `tbluser` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tblfaculty`
