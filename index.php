@@ -1,19 +1,16 @@
 <?php
-    include 'connections/connect.php';
+include 'connections/connect.php';
 ?>
 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Faculty Workload Management System</title>
 
-
-    <title>Faculty Workload Management System</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/index.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/index.css">
 
 
-<body>
 <div class="wrap">
     <main class="hero">
         <div class="logo">
@@ -29,6 +26,7 @@
         <h2>Welcome Back!</h2>
         <p class="lead">Please sign in to manage assignments</p>
         <form class="form" method="post" action="#">
+            <input type="hidden" name="form_type" value="login">
             <div class="input">
                 <label for="email">Email</label>
                 <input id="email" name="email" type="email" placeholder="Email" required>
@@ -41,7 +39,32 @@
                 <label class="remember"><input type="checkbox"> Remember Me</label>
                 <a href="registerfaculty.php" style="color:#3b2b1f;text-decoration:none;font-size:14px">Need help logging in?</a>
             </div>
-            <button class="btn" type="submit"><a href="dashboard.php">Log In</a></button>
+            <button class="btn" type="submit">Log In</button>
         </form>
     </aside>
 </div>
+
+
+<?php
+if ($_POST['form_type'] == 'login') {
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    $stmt = $connection->prepare("SELECT id, password FROM tbluser WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        if (password_verify($password, $row['password'])) {
+            session_start();
+            $_SESSION['user_id'] = $row['id'];
+            header("location: dashboard.php");
+            exit();
+        } else {
+            echo "<script>alert('Invalid email or password. Please try again.');</script>";
+        }
+    } else {
+        echo "<script>alert('Invalid email or password. Please try again.');</script>";
+    }
+}
