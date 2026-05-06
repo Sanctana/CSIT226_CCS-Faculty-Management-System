@@ -46,7 +46,7 @@ include 'connections/connect.php';
 
 
 <?php
-if ($_POST['form_type'] == 'login') {
+if (isset($_POST['form_type']) && $_POST['form_type'] === 'login') {
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
 

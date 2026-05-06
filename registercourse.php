@@ -1,47 +1,23 @@
 <?php
-    include 'connections/connect.php';
-    require_once 'assets/includes/sidebar.php';
+include 'connections/connect.php';
+require_once 'assets/includes/sidebar.php';
 
-    $pageTitle = "Register Course";
+$pageTitle = "Register Course";
 ?>
 
-<!--insert registered course data into db -->
-<?php
-    // checks if form is submitted
-    if(isset($_POST['btnRegister'])) {
-        // removes whitespace and makes values safe for SQL
-        $coursecode = mysqli_real_escape_string($connection, trim($_POST['coursecode']));
-        $coursetitle = mysqli_real_escape_string($connection, trim($_POST['coursetitle']));
-        $units = (int) $_POST['units']; // int for units
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        // perform sql insert
-        $sql = "INSERT INTO tblcourse(coursecode, coursetitle, units) VALUES
-                ('$coursecode', '$coursetitle', '$units')";
-        
-        // insert registered data to db and check
-        if(mysqli_query($connection, $sql)) {
-            header("Location: managementcourse.php");
-            exit();
-        } else {
-            $error = "Failed to save course: " .mysqli_error($connection);
-        }
-    }
-?>
+<title>CCS | Course Registration</title>
 
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <title>CCS | Course Registration</title>
-
-
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="assets/css/sidebar.css">
-    <link rel="stylesheet" href="assets/css/topbar.css">
-    <link rel="stylesheet" href="assets/css/variables.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/formtemplate.css">
+<link rel="stylesheet" href="assets/css/sidebar.css">
+<link rel="stylesheet" href="assets/css/topbar.css">
+<link rel="stylesheet" href="assets/css/variables.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/formtemplate.css">
 
 <div class="main-wrapper">
     <?php require_once 'assets/includes/topbar.php'; ?>
@@ -64,8 +40,9 @@
 
 
                 <form method="post">
-
+                    <input type="hidden" name="form_type" value="course_registration">
                     <div class="form-grid">
+
 
                         <div class="form-group">
                             <label class="form-label">Course Code</label>
@@ -83,6 +60,11 @@
                             <input type="number" name="units" class="form-input" required>
                         </div>
 
+                        <div class="form-group">
+                            <label class="form-label">Year Level</label>
+                            <input type="number" name="yearlevel" class="form-input" required>
+                        </div>
+
                     </div>
 
                     <input type="submit" name="btnRegister" value="Register Course" class="form-submit">
@@ -94,3 +76,28 @@
     </main>
 
 </div>
+
+<!--insert registered course data into db -->
+<?php
+// checks if form is submitted
+if (isset($_POST['form_type']) && $_POST['form_type'] === 'course_registration') {
+    // removes whitespace and makes values safe for SQL
+    $coursecode = mysqli_real_escape_string($connection, trim($_POST['coursecode']));
+    $coursetitle = mysqli_real_escape_string($connection, trim($_POST['coursetitle']));
+    $units = $_POST['units'];
+    $yearlevel =  $_POST['yearlevel'];
+
+    $stmt = $connection->prepare("INSERT INTO tblcourse (coursecode, coursetitle, units, year_level) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssii", $coursecode, $coursetitle, $units, $yearlevel);
+    $stmt->execute();
+
+    // perform sql insert
+    // insert registered data to db and check
+    if ($stmt->affected_rows > 0) {
+        header("Location: managementcourse.php");
+        exit();
+    } else {
+        echo "Failed to save course: " . mysqli_error($connection);
+    }
+}
+?>
