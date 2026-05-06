@@ -94,7 +94,7 @@ if (isset($_POST['form_type']) && $_POST['form_type'] === 'course_registration')
     // perform sql insert
     // insert registered data to db and check
     if ($stmt->affected_rows > 0) {
-        header("Location: managementcourse.php");
+        echo "<script>window.location.href='managementcourse.php';</script>";
         exit();
     } else {
         echo "Failed to save course: " . mysqli_error($connection);

@@ -21,7 +21,6 @@ $pageTitle = "Course Management";
 <link rel="stylesheet" href="assets/css/formtemplate.css">
 
 
-
 <div class="main-wrapper">
     <?php require_once 'assets/includes/topbar.php'; ?>
     <!-- body content -->
@@ -37,7 +36,7 @@ $pageTitle = "Course Management";
                 </div>
 
                 <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Search by course code or title...">
+                    <input type="text" id="course-search" class="search-input" placeholder="Search by course code or title...">
                 </div>
 
                 <table class="data-table">
@@ -51,29 +50,57 @@ $pageTitle = "Course Management";
                         </tr>
                     </thead>
 
-                    <?php
-                    $sql = "SELECT * FROM tblcourse";
-                    $result = $connection->query($sql);
+                    <tbody id="course-table-body">
+                        <?php
+                        $sql = "SELECT * FROM tblcourse";
+                        $result = $connection->query($sql);
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $row['coursecode'] . "</td>";
-                            echo "<td>" . $row['coursetitle'] . "</td>";
-                            echo "<td>" . $row['units'] . "</td>";
-                            echo "<td>" . $row['year_level'] . "</td>";
-                            echo "<td>
-                                    <a href='editcourse.php?id=" . $row['coursecodeid'] . "' class='edit-btn'>Edit</a>
-                                    <a href='deletecourse.php?id=" . $row['coursecodeid'] . "' class='delete-btn'>Delete</a>
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row['coursecode'] . "</td>";
+                                echo "<td>" . $row['coursetitle'] . "</td>";
+                                echo "<td>" . $row['units'] . "</td>";
+                                echo "<td>" . $row['year_level'] . "</td>";
+
+                                // TODO: Plan on what to do on these actions later
+                                echo "<td>
+                                    <a class='btn-edit' style='text-decoration: none;'>Edit</a>
+                                    <span class='action-sep'>|</span>
+                                    <a class='btn-delete'>Delete</a>
                                   </td>";
-                            echo "</tr>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5'>No courses found.</td></tr>";
                         }
-                    } else {
-                        echo "<tr><td colspan='5'>No courses found.</td></tr>";
-                    }
-                    ?>
+                        ?>
+                    </tbody>
                 </table>
             </div>
         </div>
     </main>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('course-search');
+        const tbody = document.getElementById('course-table-body');
+        let timer = null;
+
+        async function doSearch(q) {
+            try {
+                const res = await fetch(`api/search_course.php?q=${encodeURIComponent(q)}`);
+                if (!res.ok) throw new Error('Network error');
+                tbody.innerHTML = await res.text();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        input.addEventListener('input', (e) => {
+            const q = e.target.value.trim();
+            clearTimeout(timer);
+            timer = setTimeout(() => doSearch(q), 300); // 300ms debounce
+        });
+    });
+</script>
