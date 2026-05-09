@@ -13,6 +13,17 @@ $query = "SELECT u.firstname, u.lastname, u.email, u.contactnumber, f.specializa
 $result = mysqli_query($connection, $query);
 $faculty = mysqli_fetch_assoc($result);
 
+// Handle delete
+if (isset($_GET['delete_id'])) {
+    $delete_id = (int) $_GET['delete_id'];
+    if ($delete_id > 0) {
+        $delete_query = "DELETE FROM tbleducation WHERE id = $delete_id AND faculty_id = $faculty_id";
+        mysqli_query($connection, $delete_query);
+    }
+    header("Location: facultyprofile.php");
+    exit();
+}
+
 // Fetch education
 $edu_query = "SELECT * FROM tbleducation WHERE faculty_id = $faculty_id";
 $edu_result = mysqli_query($connection, $edu_query);
@@ -48,20 +59,25 @@ $edu_result = mysqli_query($connection, $edu_query);
                     </div>
 
                     <h3>Educational Background</h3>
+                    <a href="addeducation.php" class="btn-add">Add Education</a>
                     <table class="education-table">
                         <thead>
                             <tr>
                                 <th>Degree</th>
                                 <th>Institution</th>
                                 <th>Year Graduated</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php while($edu = mysqli_fetch_assoc($edu_result)) { ?>
                                 <tr>
                                     <td><?php echo $edu['degree']; ?></td>
-                                    <td><?php echo $edu['institution']; ?></td>
-                                    <td><?php echo $edu['yeargraduated']; ?></td>
+                                    <td><?php echo $edu['school']; ?></td>
+                                    <td><?php echo $edu['year_graduated']; ?></td>
+                                    <td>
+                                        <a href="facultyprofile.php?delete_id=<?php echo $edu['id']; ?>" class="btn-delete" onclick= "return confirm('Are you sure you want to delete this education record?');">Delete</a>
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -74,18 +90,6 @@ $edu_result = mysqli_query($connection, $edu_query);
 </html>
 
 
-<!--delete logic-->
-<?php
-// Handle delete
-if (isset($_GET['delete_id'])) {
-    $delete_id = (int) $_GET['delete_id'];
-    if ($delete_id > 0) {
-        $delete_query = "DELETE FROM tblfacultyeducation WHERE id = $delete_id AND facultyid = $faculty_id";
-        mysqli_query($connection, $delete_query);
-    }
-    header("Location: facultyprofile.php");
-    exit();
-}
 
 
 

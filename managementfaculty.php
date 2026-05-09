@@ -50,7 +50,6 @@
                     </tr>
                     </thead>
                     <tbody>
-
                 </table>
             </div>
         </div>

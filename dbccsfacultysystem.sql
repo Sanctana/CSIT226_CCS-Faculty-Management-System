@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2026 at 04:14 PM
+-- Generation Time: May 07, 2026 at 03:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -77,11 +77,18 @@ CREATE TABLE `tbldepartmenthead` (
 
 CREATE TABLE `tbleducation` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `faculty_id` int(11) NOT NULL,
   `degree` varchar(50) NOT NULL,
   `school` varchar(50) NOT NULL,
   `year_graduated` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbleducation`
+--
+
+INSERT INTO `tbleducation` (`id`, `faculty_id`, `degree`, `school`, `year_graduated`) VALUES
+(2, 1, 'BSIT', 'CTU', '2005');
 
 -- --------------------------------------------------------
 
@@ -200,7 +207,8 @@ ALTER TABLE `tblcourse`
 -- Indexes for table `tblcourseschedule`
 --
 ALTER TABLE `tblcourseschedule`
-  ADD PRIMARY KEY (`scheduleid`);
+  ADD PRIMARY KEY (`scheduleid`),
+  ADD KEY `fk_coursechedule_assignmentid_teachingassignment` (`assignmentid`);
 
 --
 -- Indexes for table `tbldepartmenthead`
@@ -213,7 +221,7 @@ ALTER TABLE `tbldepartmenthead`
 --
 ALTER TABLE `tbleducation`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_education_id_user` (`user_id`);
+  ADD KEY `fk_education_id_user` (`faculty_id`);
 
 --
 -- Indexes for table `tblfaculty`
@@ -266,7 +274,7 @@ ALTER TABLE `tblcourseschedule`
 -- AUTO_INCREMENT for table `tbleducation`
 --
 ALTER TABLE `tbleducation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tblprogram`
@@ -291,6 +299,12 @@ ALTER TABLE `tbluser`
 --
 
 --
+-- Constraints for table `tblcourseschedule`
+--
+ALTER TABLE `tblcourseschedule`
+  ADD CONSTRAINT `fk_coursechedule_assignmentid_teachingassignment` FOREIGN KEY (`assignmentid`) REFERENCES `tblteachingassignment` (`assignmentid`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `tbldepartmenthead`
 --
 ALTER TABLE `tbldepartmenthead`
@@ -300,7 +314,7 @@ ALTER TABLE `tbldepartmenthead`
 -- Constraints for table `tbleducation`
 --
 ALTER TABLE `tbleducation`
-  ADD CONSTRAINT `fk_education_id_user` FOREIGN KEY (`user_id`) REFERENCES `tbluser` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_education_id_user` FOREIGN KEY (`faculty_id`) REFERENCES `tblfaculty` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tblfaculty`
