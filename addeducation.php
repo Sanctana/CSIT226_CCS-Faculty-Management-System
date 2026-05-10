@@ -13,7 +13,7 @@ $pageTitle = "Add Education";
         $year_graduated = (int) $_POST['year_graduated']; 
 
         // Assume the current faculty ID is 1 for now (replace with session later)
-        $faculty_id = 1;
+        $faculty_id =16;
 
         // perform sql insert
         $sql = "INSERT INTO tbleducation(faculty_id, degree, school, year_graduated) VALUES
