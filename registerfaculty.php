@@ -132,11 +132,11 @@ if (isset($_POST['btnRegister'])) {
                         <div class="form-group">
                             <label class="form-label">Specialization</label>
                             <select name="txtspecialization" class="form-select" required>
-                                <option value="">Select Specialization</option>
-                                <option value="1">Mobile Development</option>
-                                <option value="2">Web Development</option>
-                                <option value="3">Information Management</option>
-                                <option value="4">Game Development</option>
+                                <option value="No specialization">Select Specialization</option>
+                                <option value="Mobile Development">Mobile Development</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Information Management">Information Management</option>
+                                <option value="Game Development">Game Development</option>
                             </select>
                         </div>
                     </div>

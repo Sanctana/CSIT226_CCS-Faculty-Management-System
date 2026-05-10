@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 10, 2026 at 05:57 PM
+-- Host: localhost
+-- Generation Time: May 10, 2026 at 07:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -101,9 +101,9 @@ CREATE TABLE `tblfaculty` (
 --
 
 INSERT INTO `tblfaculty` (`id`, `specialization`) VALUES
-(16, '4'),
-(17, '3'),
-(18, '2');
+(16, 'Game Development'),
+(17, 'Information Management'),
+(18, 'Web Development');
 
 -- --------------------------------------------------------
 
@@ -222,6 +222,7 @@ ALTER TABLE `tbleducation`
 -- Indexes for table `tblfaculty`
 --
 ALTER TABLE `tblfaculty`
+  ADD UNIQUE KEY `id` (`id`),
   ADD KEY `fk_faculty_user_id_user` (`id`);
 
 --
