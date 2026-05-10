@@ -4,8 +4,7 @@ include 'connections/connect.php';
 require_once 'assets/includes/sidebar.php';
 $pageTitle = "Faculty Profile";
 
-// Assume faculty ID is 1 for now
-$faculty_id = 16;
+$faculty_id = $_SESSION['user_id'] ?? 18;
 
 // Fetch faculty info
 $query = "SELECT u.firstname, u.lastname, u.email, u.contactnumber, f.specialization, u.employeestatus 

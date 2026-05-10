@@ -3,6 +3,8 @@ include 'connections/connect.php';
 require_once 'assets/includes/sidebar.php';
 
 $pageTitle = "Faculty Management";
+
+$user_id = $_SESSION['user_id'] ?? 0;
 ?>
 
 <meta charset="UTF-8">
@@ -45,9 +47,9 @@ $pageTitle = "Faculty Management";
                     <tbody>
                         <?php
                         // join tbluser and tblfaculty to get complete info
-                        $sql = "SELECT u.id, u.firstname, u.lastname, u.email, u.contactnumber, u.employeestatus, f.specialization, 
+                        $sql = "SELECT u.id, u.firstname, u.lastname, u.email, u.contactnumber, u.employeestatus, f.specialization
                                 FROM tbluser u
-                                INNER JOIN tblfaculty f ON u.id = f.id";
+                                INNER JOIN tblfaculty f ON u.id = f.id WHERE u.id != $user_id"; // exclude current user
                         $result = mysqli_query($connection, $sql);
 
                         if ($result && mysqli_num_rows($result) > 0) {
@@ -84,7 +86,6 @@ $pageTitle = "Faculty Management";
 
 
 <?php
-include 'connections/connect.php';
 
 if (isset($_GET['delete_id'])) {
     $delete_id = (int) $_GET['delete_id'];
@@ -93,7 +94,7 @@ if (isset($_GET['delete_id'])) {
         mysqli_query($connection, "DELETE FROM tbluser WHERE id = $delete_id");
     }
 
-    header("Location: managementfaculty.php");
+    echo "<script>window.location.href='managementfaculty.php';</script>";
     exit();
 }
 ?>

@@ -56,7 +56,6 @@ $pageTitle = "Section Management";
                             echo "<td>{$row['sectionname']}</td>";
                             echo "<td>{$row['yearlevel']}</td>";
                             echo "<td>{$row['programname']}</td>";
-                            // TODO: Plan on what to do on these actions later
                             echo "<td>
                                     <a class='btn-edit' style='text-decoration: none;'>Edit</a>
                                     <span class='action-sep'>|</span>

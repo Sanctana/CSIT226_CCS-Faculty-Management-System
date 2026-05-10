@@ -57,7 +57,6 @@ if (isset($_POST['form_type']) && $_POST['form_type'] === 'login') {
 
     if ($row = $result->fetch_assoc()) {
         if (password_verify($password, $row['password'])) {
-            session_start();
             $_SESSION['user_id'] = $row['id'];
             header("location: dashboard.php");
             exit();

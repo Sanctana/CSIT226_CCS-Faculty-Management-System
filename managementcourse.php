@@ -59,9 +59,9 @@ $pageTitle = "Course Management";
                                 echo "<td>" . $row['units'] . "</td>";
                                 echo "<td>" . $row['year_level'] . "</td>";
 
-                                // TODO: Plan on what to do on these actions later
+                                $courseId = urlencode($row['coursecodeid']);
                                 echo "<td>
-                                    <a class='btn-edit' style='text-decoration: none;'>Edit</a>
+                                    <a href='registercourse.php?id={$courseId}' class='btn-edit' style='text-decoration: none;'>Edit</a>
                                     <span class='action-sep'>|</span>
                                     <a class='btn-delete'>Delete</a>
                                   </td>";

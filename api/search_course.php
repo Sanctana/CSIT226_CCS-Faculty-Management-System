@@ -19,10 +19,11 @@ if ($result && $result->num_rows > 0) {
 		echo "<td>" . htmlspecialchars($row['coursetitle']) . "</td>";
 		echo "<td>" . htmlspecialchars($row['units']) . "</td>";
 		echo "<td>" . htmlspecialchars($row['year_level']) . "</td>";
-		// TODO: Add edit and delete links with proper URL encoding
+		$courseId = urlencode($row['coursecodeid']);
 		echo "<td>
-							<a href='editcourse.php?id=" . urlencode($row['coursecodeid']) . "' class='edit-btn'>Edit</a>
-							<a href='deletecourse.php?id=" . urlencode($row['coursecodeid']) . "' class='delete-btn'>Delete</a>
+							<a href='registercourse.php?id={$courseId}' class='btn-edit' style='text-decoration: none;'>Edit</a>
+							<span class='action-sep'>|</span>
+							<a class='btn-delete'>Delete</a>
           </td>";
 		echo "</tr>";
 	}
