@@ -79,15 +79,9 @@ body {
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.2s;
     box-shadow: 0 4px 12px rgba(244, 123, 32, 0.2);
     text-decoration: none; /* removes underline if used as link kay if ga <a> mo underline mana */
     display: inline-block; /* allows padding + proper sizing */
-}
-
-.add-btn:hover { /* hover effect for add button */
-    transform: translateY(-2px); /* mo up when hovered */
-    box-shadow: 0 8px 20px rgba(244, 123, 32, 0.3);
 }
 
 /* will be used if naa nami actions ---- mainly for small buttons */
@@ -217,29 +211,6 @@ td {
 }
 
 
-/* search bar */
-
-.search-bar {
-    margin-bottom: 24px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid var(--border-light);
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: #fafaf9;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(244, 123, 32, 0.1);
-}
 
 /* main used sa dashboard -- for small ui rani siya*/
 

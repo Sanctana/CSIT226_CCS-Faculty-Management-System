@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 06, 2026 at 07:57 PM
+-- Host: 127.0.0.1
+-- Generation Time: May 10, 2026 at 05:57 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -85,13 +85,6 @@ CREATE TABLE `tbleducation` (
   `year_graduated` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tbleducation`
---
-
-INSERT INTO `tbleducation` (`id`, `faculty_id`, `degree`, `school`, `year_graduated`) VALUES
-(2, 1, 'BSIT', 'CTU', '2005');
-
 -- --------------------------------------------------------
 
 --
@@ -108,11 +101,9 @@ CREATE TABLE `tblfaculty` (
 --
 
 INSERT INTO `tblfaculty` (`id`, `specialization`) VALUES
-(1, '1'),
-(3, '4'),
-(6, '2'),
-(13, '1'),
-(14, '1');
+(16, '4'),
+(17, '3'),
+(18, '2');
 
 -- --------------------------------------------------------
 
@@ -152,7 +143,8 @@ CREATE TABLE `tblsection` (
 
 INSERT INTO `tblsection` (`sectionid`, `sectionname`, `yearlevel`, `programid`) VALUES
 (1, 'S69', 3, 2),
-(2, 'F1', 1, 1);
+(2, 'F1', 1, 1),
+(3, 'G2', 2, 2);
 
 -- --------------------------------------------------------
 
@@ -190,11 +182,9 @@ CREATE TABLE `tbluser` (
 --
 
 INSERT INTO `tbluser` (`id`, `firstname`, `lastname`, `birthdate`, `gender`, `email`, `contactnumber`, `password`, `employeestatus`) VALUES
-(1, 'Joel Theo', 'Gallardo', '2026-07-15', 'M', 'joeltheo.gallardo@cit.edu', '09123456789', '$2y$10$8arqDZp3PNWCg0KcbVCZoO056UwMFYQALLQ2g.pU7mOFUROdCRrCu', 'PT'),
-(3, 'Saint Tria', 'Tangpos', '2005-11-02', 'M', 'sainttria.tangpos@cit.edu', '09123456789', '$2y$10$698fzipaJYNEKZdHt693ouIG2tDH4urdKpYR49es8i6iH7tzCrwta', 'FT'),
-(6, 'James Kenneth', 'Acabal', '2004-06-19', 'M', 'jameskenneth.acabal@cit.edu', '09123456789', '$2y$10$JDpitA7cbdSUH.Mjn7M8DuYYf2vFcap8GrA4sOzMTceTEJPUKsGhK', 'PT'),
-(13, 'name', 'last', '2026-05-01', 'M', 'email@email.com', '123', '$2y$10$y7HVieZwS7.XTGEdK9BBTuw7uWX4TJVUa3rpZnqRYysu98kibNWya', 'PT'),
-(14, 'jani', 'tor', '2026-05-01', 'M', 'jksa@cit.edu', '123456789', '$2y$10$nbrcidergUOOy3cXK/YriOWq6qAhiUHaREjAR/hm0E4xen2nDmvie', 'FT');
+(16, 'Admin', 'Test', '2026-05-10', 'F', 'admin.test@cit.edu', '09123456789', '$2y$10$Gur95H8f5UEaReIKd5Pzx.MUf8fwoiYGngNUZTAZ3lVQM2kkXCCsq', 'FT'),
+(17, 'Cherry Lyn', 'Sta. Romana', '2026-05-01', 'F', 'cherrylyn.staromana@cit.edu', '09123456789', '$2y$10$jH./2A1LgIJQWWTqgFNWVuWlsOgZDQ74/I87aiHxyYZVoJlzXakWO', 'FT'),
+(18, 'Cheryl', 'Pantaleon', '2026-05-08', 'F', 'cheryl.pantaleon@cit.edu', '09123456789', '$2y$10$HovUapZENERQfBP4Ss/J5uQkdY4zsEimadxil5mDGC2dUcO17SJhu', 'FT');
 
 --
 -- Indexes for dumped tables
@@ -291,13 +281,13 @@ ALTER TABLE `tblprogram`
 -- AUTO_INCREMENT for table `tblsection`
 --
 ALTER TABLE `tblsection`
-  MODIFY `sectionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `sectionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables

@@ -43,18 +43,6 @@ if (!isset($pageTitle)) {
             <div class="live-dot"></div>
             2nd Semester, AY 2023-2024
         </div>
-
-        <div class="profile-trigger">
-            <div class="user-text">
-                <span class="user-name">Cherry Lyn Sta. Romana</span>
-                <span class="user-role">CS Department Head</span>
-            </div>
-
-            <div class="avatar"
-                 style="background: url('https://ui-avatars.com/api/?name=Cherry+Sta+Romana&background=f47b20&color=fff');
-                        background-size: cover;">
-            </div>
-        </div>
     </div>
 
 </header>

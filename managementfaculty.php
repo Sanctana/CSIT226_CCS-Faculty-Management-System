@@ -34,10 +34,6 @@
                     <a href="registerfaculty.php" class="add-btn">+ Add New Faculty</a>
                 </div>
 
-                <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Search by name, email, or specialization...">
-                </div>
-
                 <table class="faculty-table">
                     <thead>
                     <tr>

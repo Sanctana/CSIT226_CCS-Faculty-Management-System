@@ -36,11 +36,6 @@ $pageTitle = "Schedule Management";
                     <a href="registerschedule.php" class="add-btn">+ Create Schedule</a>
                 </div>
 
-                <!-- search -->
-                <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Search by day, room, or building...">
-                </div>
-
                 <!-- schedule table -->
                 <table class="data-table">
                     <thead>

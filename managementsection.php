@@ -35,10 +35,6 @@ $pageTitle = "Section Management";
                     <a href="registersection.php" class="add-btn">+ Add Section</a>
                 </div>
 
-                <div class="search-bar">
-                    <input type="text" class="search-input" id="section-search" placeholder="Search by section name or year level...">
-                </div>
-
                 <table class="data-table">
                     <thead>
                         <tr>
