@@ -35,6 +35,10 @@ $pageTitle = "Course Management";
                     <a href="registercourse.php" class="add-btn">+ Add Course</a>
                 </div>
 
+                <div class="search-bar">
+                    <input type="text" id="course-search" class="search-input" placeholder="Search by course code or title...">
+                </div>
+
                 <table class="data-table">
                     <thead>
                         <tr>

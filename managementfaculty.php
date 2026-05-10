@@ -33,6 +33,10 @@ $user_id = $_SESSION['user_id'] ?? 0;
                     <a href="registerfaculty.php" class="add-btn">+ Add New Faculty</a>
                 </div>
 
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search by name, email, or specialization...">
+                </div>
+
                 <table class="data-table">
                     <thead>
                         <tr>
