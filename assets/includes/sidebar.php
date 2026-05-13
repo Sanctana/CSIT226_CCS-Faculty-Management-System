@@ -1,6 +1,11 @@
 <?php
-// Get current page filename
 $current_page = basename($_SERVER['PHP_SELF']);
+
+if (!isset($_SESSION['user_id'])) {
+    header("location: index.php");
+    exit();
+}
+$isAdmin = $_SESSION['role'] === 'department_head';
 ?>
 
 <aside class="sidebar">
@@ -8,49 +13,42 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <div class="nav-section">
         <div class="nav-label">Menu</div>
         <a href="dashboard.php"
-           class="nav-item <?php if($current_page == 'dashboard.php') echo 'active'; ?>">
+            class="nav-item <?php if ($current_page == 'dashboard.php') echo 'active'; ?>">
             Dashboard
         </a>
-        <a href="managementfaculty.php"
-           class="nav-item <?php if($current_page == 'managementfaculty.php') echo 'active'; ?>">
-            Faculty Management
-        </a>
-<!--        Add Faculty, Edit Faculty, Delete Faculty, View Faculty-->
-        <a href="workloadassignment.php"
-           class="nav-item <?php if($current_page == 'workloadassignment.php') echo 'active'; ?>">
-            Workload Assignment
-        </a>
-<!--        Assign faculty -> coursae -> section -> schedule-->
-<!--        View teaching load-->
-<!--        Detect overload-->
+
+        <?php
+        if ($isAdmin) {
+            echo '<a href="managementfaculty.php" class="nav-item ' . ($current_page == 'managementfaculty.php' ? 'active' : '') . '">Faculty Management</a>';
+            # Add Faculty, Edit Faculty, Delete Faculty, View Faculty
+            echo '<a href="workloadassignment.php" class="nav-item ' . ($current_page == 'workloadassignment.php' ? 'active' : '') . '">Workload Assignment</a>';
+            # Assign faculty -> course -> section -> schedule-->
+            # View teaching load-->
+            # Detect overload-->
+        }
+        ?>
     </div>
     <div class="nav-section">
         <div class="nav-label">Curriculum</div>
-        <a href="managementcourse.php"
-           class="nav-item <?php if($current_page == 'managementcourse.php') echo 'active'; ?>">
-            Course Management
-        </a>
-<!--        Add Course, Edit Course, Delete Course, View Course-->
-        <a href="managementsection.php"
-           class="nav-item <?php if($current_page == 'managementsection.php') echo 'active'; ?>">
-            Section Management
-        </a>
-<!--        Add Section, Edit, Delete -->
-        <a href="managementschedule.php"
-           class="nav-item <?php if($current_page == 'managementschedule.php') echo 'active'; ?>">
-            Schedule Management
-        </a>
 
-        <!--        Add Schedule (Day, Time, Room), Edit, Delete-->
+        <?php
+        if ($isAdmin) {
+            echo '<a href="managementcourse.php" class="nav-item ' . ($current_page == 'managementcourse.php' ? 'active' : '') . '">Course Management</a>';
+            # Add Course, Edit Course, Delete Course, View Course
+            echo '<a href="managementsection.php" class="nav-item ' . ($current_page == 'managementsection.php' ? 'active' : '') . '">Section Management</a>';
+            # Add Section, Edit, Delete
+            echo '<a href="managementschedule.php" class="nav-item ' . ($current_page == 'managementschedule.php' ? 'active' : '') . '">Schedule Management</a>';
+            # Add Schedule (Day, Time, Room), Edit, Delete
+
+            echo '<a href="registerload.php" class="nav-item ' . ($current_page == 'registerload.php' ? 'active' : '') . '">Register Load</a>';
+        }
+        ?>
     </div>
     <div style="margin-top: auto; padding: 24px; border-top: 1px solid var(--border-light);">
         <a href="logout.php"
-           class="nav-item <?php if($current_page == 'logout.php') echo 'active'; ?>"
-           style="color: #cf1322;">
+            class="nav-item <?php if ($current_page == 'logout.php') echo 'active'; ?>"
+            style="color: #cf1322;">
             Logout
         </a>
     </div>
 </aside>
-
-
-

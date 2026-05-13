@@ -50,7 +50,7 @@ if (isset($_POST['form_type']) && $_POST['form_type'] === 'login') {
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
-    $stmt = $connection->prepare("SELECT id, password FROM tbluser WHERE email = ?");
+    $stmt = $connection->prepare("SELECT id, password, firstname FROM tbluser WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -58,6 +58,19 @@ if (isset($_POST['form_type']) && $_POST['form_type'] === 'login') {
     if ($row = $result->fetch_assoc()) {
         if (password_verify($password, $row['password'])) {
             $_SESSION['user_id'] = $row['id'];
+            $_SESSION['firstname'] = $row['firstname'];
+
+            $stmt = $connection->prepare("SELECT * FROM tbldepartmenthead WHERE id = ?");
+            $stmt->bind_param("i", $row['id']);
+            $stmt->execute();
+            $deptHeadResult = $stmt->get_result();
+
+            if ($deptHeadResult->num_rows > 0) {
+                $_SESSION['role'] = 'department_head';
+            } else {
+                $_SESSION['role'] = 'faculty';
+            }
+
             header("location: dashboard.php");
             exit();
         } else {
