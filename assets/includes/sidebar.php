@@ -21,10 +21,6 @@ $isAdmin = $_SESSION['role'] === 'department_head';
         if ($isAdmin) {
             echo '<a href="managementfaculty.php" class="nav-item ' . ($current_page == 'managementfaculty.php' ? 'active' : '') . '">Faculty Management</a>';
             # Add Faculty, Edit Faculty, Delete Faculty, View Faculty
-            echo '<a href="workloadassignment.php" class="nav-item ' . ($current_page == 'workloadassignment.php' ? 'active' : '') . '">Workload Assignment</a>';
-            # Assign faculty -> course -> section -> schedule-->
-            # View teaching load-->
-            # Detect overload-->
         }
         ?>
     </div>
@@ -37,9 +33,6 @@ $isAdmin = $_SESSION['role'] === 'department_head';
             # Add Course, Edit Course, Delete Course, View Course
             echo '<a href="managementsection.php" class="nav-item ' . ($current_page == 'managementsection.php' ? 'active' : '') . '">Section Management</a>';
             # Add Section, Edit, Delete
-            echo '<a href="managementschedule.php" class="nav-item ' . ($current_page == 'managementschedule.php' ? 'active' : '') . '">Schedule Management</a>';
-            # Add Schedule (Day, Time, Room), Edit, Delete
-
             echo '<a href="registerload.php" class="nav-item ' . ($current_page == 'registerload.php' ? 'active' : '') . '">Register Load</a>';
         }
         ?>

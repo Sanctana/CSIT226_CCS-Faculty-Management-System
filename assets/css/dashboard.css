@@ -186,6 +186,18 @@
     word-break: break-word;
 }
 
+.schedule-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+}
+
+.schedule-card-actions a {
+    text-decoration: none;
+}
+
 @media (max-width: 768px) {
     .schedules-grid {
         grid-template-columns: 1fr;

@@ -2,7 +2,19 @@
 include 'connections/connect.php';
 $pageTitle = "Dashboard";
 
-$isAdmin = $_SESSION['role'] === 'department_head';
+$isAdmin = $_SESSION['role']  === 'department_head';
+$schedules = [];
+
+// Map day of week numbers to names
+$dayNames = [
+    'M' => 'Monday',
+    'T' => 'Tuesday',
+    'W' => 'Wednesday',
+    'TH' => 'Thursday',
+    'F' => 'Friday',
+    'SAT' => 'Saturday',
+    'SUN' => 'Sunday'
+];
 
 if ($isAdmin) {
     // Admin sees all schedules
@@ -30,7 +42,7 @@ if ($isAdmin) {
     ";
 } else {
     // Faculty sees only their own schedules
-    $currentUserId = $_SESSION['id'];
+    $currentUserId = $_SESSION['user_id'] ?? 0;
     $scheduleQuery = "
         SELECT 
             cs.scheduleid,
@@ -57,23 +69,11 @@ if ($isAdmin) {
 }
 
 $scheduleResult = $connection->query($scheduleQuery);
-$schedules = [];
 if ($scheduleResult) {
     while ($row = $scheduleResult->fetch_assoc()) {
         $schedules[] = $row;
     }
 }
-
-// Map day of week numbers to names
-$dayNames = [
-    'M' => 'Monday',
-    'T' => 'Tuesday',
-    'W' => 'Wednesday',
-    'TH' => 'Thursday',
-    'F' => 'Friday',
-    'SAT' => 'Saturday',
-    'SUN' => 'Sunday'
-];
 ?>
 
 <meta charset="UTF-8">
@@ -149,9 +149,9 @@ $dayNames = [
                                     <div class="schedule-item">
                                         <span class="label">Time:</span>
                                         <span class="value">
-                                            <?php 
-                                                echo htmlspecialchars(date('h:i A', strtotime($schedule['starttime']))) . ' - ' . 
-                                                     htmlspecialchars(date('h:i A', strtotime($schedule['endtime'])));
+                                            <?php
+                                            echo htmlspecialchars(date('h:i A', strtotime($schedule['starttime']))) . ' - ' .
+                                                htmlspecialchars(date('h:i A', strtotime($schedule['endtime'])));
                                             ?>
                                         </span>
                                     </div>
@@ -159,12 +159,19 @@ $dayNames = [
                                     <div class="schedule-item">
                                         <span class="label">Location:</span>
                                         <span class="value">
-                                            <?php 
-                                                echo htmlspecialchars($schedule['building'] . ' - ' . 
-                                                     $schedule['roomnumber'] . ' (' . $schedule['roomtype'] . ')');
+                                            <?php
+                                            echo htmlspecialchars($schedule['building'] . ' - ' .
+                                                $schedule['roomnumber'] . ' (' . $schedule['roomtype'] . ')');
                                             ?>
                                         </span>
                                     </div>
+
+                                    <?php if ($isAdmin): ?>
+                                        <div class="schedule-card-actions">
+                                            <a href="editschedule.php?id=<?php echo (int) $schedule['scheduleid']; ?>" class="btn-edit">Edit</a>
+                                            <a href="dashboard.php?delete_schedule_id=<?php echo (int) $schedule['scheduleid']; ?>" class="btn-delete" onclick="return confirm('Are you sure you want to delete this schedule?');">Delete</a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -174,3 +181,43 @@ $dayNames = [
         </div>
     </main>
 </div>
+
+<?php
+if ($isAdmin && isset($_GET['delete_schedule_id']) && ctype_digit($_GET['delete_schedule_id'])) {
+    $scheduleId = (int) $_GET['delete_schedule_id'];
+
+    $assignmentId = 0;
+    $stmt = $connection->prepare("SELECT assignmentid FROM tblcourseschedule WHERE scheduleid = ?");
+    $stmt->bind_param("i", $scheduleId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $assignmentId = (int) $row['assignmentid'];
+    }
+    $stmt->close();
+
+    if ($assignmentId > 0) {
+        $deleteStmt = $connection->prepare("DELETE FROM tblcourseschedule WHERE scheduleid = ?");
+        $deleteStmt->bind_param("i", $scheduleId);
+        $deleteStmt->execute();
+        $deleteStmt->close();
+
+        $countStmt = $connection->prepare("SELECT COUNT(*) AS cnt FROM tblcourseschedule WHERE assignmentid = ?");
+        $countStmt->bind_param("i", $assignmentId);
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $remaining = (int) ($countResult->fetch_assoc()['cnt'] ?? 0);
+        $countStmt->close();
+
+        if ($remaining === 0) {
+            $assignmentDelete = $connection->prepare("DELETE FROM tblteachingassignment WHERE assignmentid = ?");
+            $assignmentDelete->bind_param("i", $assignmentId);
+            $assignmentDelete->execute();
+            $assignmentDelete->close();
+        }
+    }
+
+    header('Location: dashboard.php');
+    exit();
+}
+
