@@ -28,9 +28,6 @@ $edu_query = "SELECT * FROM tbleducation WHERE faculty_id = $faculty_id";
 $edu_result = mysqli_query($connection, $edu_query);
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CCS | Faculty Profile</title>
@@ -40,8 +37,7 @@ $edu_result = mysqli_query($connection, $edu_query);
     <link rel="stylesheet" href="assets/css/variables.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/formtemplate.css">
-</head>
-<body>
+
     <div class="main-wrapper">
         <?php require_once 'assets/includes/topbar.php'; ?>
 
@@ -85,8 +81,6 @@ $edu_result = mysqli_query($connection, $edu_query);
             </div>
         </main>
     </div>
-</body>
-</html>
 
 
 

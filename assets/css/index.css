@@ -14,7 +14,7 @@ body {
 
 /* background image */
 body {
-    background-image: url("assets/img/Wildcat-Innovation-Labs-01.jpg");
+    background-image: url("../img/back.png");
     background-size: cover;
     background-position: center;
 }
@@ -48,7 +48,7 @@ body {
 .logo .gear {
     width: 32px;
     height: 32px;
-    background-image: url("/assets/img/cit-u.png");
+    background-image: url("../img/cit-u.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

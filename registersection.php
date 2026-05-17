@@ -1,6 +1,7 @@
 <?php
 include 'connections/connect.php';
 require_once 'assets/includes/sidebar.php';
+$pageTitle = "Section";
 ?>
 
 <meta charset="UTF-8">

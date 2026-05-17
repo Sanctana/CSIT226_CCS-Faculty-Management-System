@@ -124,8 +124,8 @@ if (isset($_POST['btnRegister'])) {
                             <label class="form-label">Employment Status</label>
                             <select name="txtemployeestatus" class="form-select" required>
                                 <option value="">Select Status</option>
-                                <option value="PT">Part-Time</option>
-                                <option value="FT">Full-Time</option>
+                                <option value="Part-Time">Part-Time</option>
+                                <option value="Full-Time">Full-Time</option>
                             </select>
                         </div>
 
@@ -137,6 +137,13 @@ if (isset($_POST['btnRegister'])) {
                                 <option value="Web Development">Web Development</option>
                                 <option value="Information Management">Information Management</option>
                                 <option value="Game Development">Game Development</option>
+                                <option value="Cybersecurity">Cybersecurity</option>
+                                <option value="Software Engineering">Software Engineering</option>
+                                <option value="Cloud Computing">Cloud Computing</option>
+                                <option value="UI/UX">UI/UX</option>
+                                <option value="Data Analytics">Data Analytics</option>
+                                <option value="Networking">Networking</option>
+                                <option value="Artificial Intelligence">Artificial Intelligence</option>
                             </select>
                         </div>
                     </div>

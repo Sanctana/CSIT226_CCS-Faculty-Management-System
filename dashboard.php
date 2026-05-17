@@ -59,7 +59,7 @@ if ($isAdmin) {
             ta.schoolyear,
             ta.section
         FROM tblcourseschedule cs
-        JOIN tblteachingassignment ta ON cs.assignmentid = ta.assignmentid
+        JOIN tblteachingassignment ta ON cs.assignmentid = ta.assignmentid 
         JOIN tblcourse c ON ta.coursecodeid = c.coursecodeid
         JOIN tblfaculty f ON ta.teacherid = f.id
         JOIN tbluser u ON f.id = u.id
@@ -94,7 +94,6 @@ if ($scheduleResult) {
 
 <div class="main-wrapper">
     <?php require_once 'assets/includes/topbar.php'; ?>
-
     <main class="content-body">
         <div class="container">
             <!-- Welcome Section -->
