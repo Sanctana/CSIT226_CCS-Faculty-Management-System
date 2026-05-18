@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 17, 2026 at 11:50 PM
+-- Host: localhost
+-- Generation Time: May 18, 2026 at 06:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -94,11 +94,14 @@ INSERT INTO `tblcourseschedule` (`scheduleid`, `dayofweek`, `starttime`, `endtim
 (4, 'M', '07:30:00', '10:30:00', 'Laboratory', 'NGE', '201', 3),
 (5, 'TH', '08:00:00', '10:00:00', 'Lecture', 'RTL', '303', 3),
 (6, 'W', '15:00:00', '18:00:00', 'Laboratory', 'NGE', '204', 4),
-(7, 'SAT', '15:30:00', '18:00:00', 'Lecture', 'ACAD', '203', 4),
-(8, 'M', '07:30:00', '10:30:00', 'Laboratory', 'NGE', '203', 5),
+(8, 'M', '07:30:00', '10:30:00', 'Laboratory', 'NGE', '204', 5),
 (9, 'F', '08:00:00', '10:30:00', 'Lecture', 'RTL', '303', 5),
-(10, 'TH', '08:00:00', '10:00:00', 'Lecture', 'RTL', '301', 6),
-(11, 'M', '07:30:00', '10:30:00', 'Laboratory', 'NGE', '206', 6);
+(11, 'M', '07:30:00', '10:30:00', 'Laboratory', 'NGE', '206', 6),
+(12, 'T', '10:30:00', '12:00:00', 'Laboratory', 'NGE', '207', 7),
+(13, 'TH', '10:30:00', '12:00:00', 'Lecture', 'RTL', '307', 7),
+(15, 'M', '18:00:00', '19:00:00', 'Lecture', 'RTL', '102', 11),
+(16, 'W', '18:00:00', '19:00:00', 'Laboratory', 'NGE', '105', 11),
+(17, 'M', '13:00:00', '14:00:00', 'Lecture', 'RTL', '307', 12);
 
 -- --------------------------------------------------------
 
@@ -164,7 +167,8 @@ INSERT INTO `tblfaculty` (`id`, `specialization`) VALUES
 (30, 'Networking'),
 (31, 'Mobile Development'),
 (32, 'Information Management'),
-(33, 'Game Development');
+(33, 'Game Development'),
+(42, 'UI/UX');
 
 -- --------------------------------------------------------
 
@@ -242,7 +246,10 @@ INSERT INTO `tblteachingassignment` (`assignmentid`, `schoolyear`, `section`, `c
 (3, '2026-2027', 'F1', 9, 27),
 (4, '2026-2027', 'F2', 17, 32),
 (5, '2026-2027', 'G2', 13, 33),
-(6, '2026-2027', 'G1', 3, 26);
+(6, '2026-2027', 'G1', 3, 26),
+(7, '2026-2027', 'F1', 17, 25),
+(11, '2026-2027', 'F1', 9, 19),
+(12, '2026-2027', 'F4', 3, 42);
 
 -- --------------------------------------------------------
 
@@ -283,7 +290,8 @@ INSERT INTO `tbluser` (`id`, `firstname`, `lastname`, `birthdate`, `gender`, `em
 (30, 'Nathaniel', 'Arbasto', '2026-03-12', 'M', 'nathaniel.arbasto@cit.edu', '09123456789', '$2y$10$Gt8EnuMwxLel5T0Ai/8b8uM3OJ8I5eALtSQkki3IeOXZvfQkwY6Pu', 'Full-Time'),
 (31, 'Joemarie', 'Amparo', '2025-12-04', 'M', 'joemarie.amparo@cit.edu', '09123456789', '$2y$10$VZDy06gaW2XuJUB151seyehec4VKfZmBBu7WRCL1Pqn2iKGOySLpC', 'Full-Time'),
 (32, 'Leah', 'Barbaso', '2026-05-09', 'F', 'leah.barbaso@cit.edu', '09123456789', '$2y$10$.p0m0.1xzM3g/y1PlIRhJ.GBr4Jrrv5KV7M/1mZgmBj1IwzccIEFy', 'Full-Time'),
-(33, 'Kenn Migan', 'Gumonan', '2026-05-07', 'M', 'kennmigan.gumonan@cit.edu', '09123456789', '$2y$10$bLWct9c.rSjMzfYI1sKjH.2ZYAFaRpIP/NrlhMxP1TdQBfZQNz2tW', 'Full-Time');
+(33, 'Kenn Migan', 'Gumonan', '2026-05-07', 'M', 'kennmigan.gumonan@cit.edu', '09123456789', '$2y$10$bLWct9c.rSjMzfYI1sKjH.2ZYAFaRpIP/NrlhMxP1TdQBfZQNz2tW', 'Full-Time'),
+(42, 'faculty', '2', '2026-05-04', 'M', 'faculty@cit.edu', '09234521234', '$2y$10$3zqIylK9iVVk.SXn7Ig36uR9bWY9dGyniBOWiu2KYuiPghVYsffJO', 'Part-Time');
 
 --
 -- Indexes for dumped tables
@@ -362,13 +370,13 @@ ALTER TABLE `tbluser`
 -- AUTO_INCREMENT for table `tblcourse`
 --
 ALTER TABLE `tblcourse`
-  MODIFY `coursecodeid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `coursecodeid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `tblcourseschedule`
 --
 ALTER TABLE `tblcourseschedule`
-  MODIFY `scheduleid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `scheduleid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tbleducation`
@@ -386,19 +394,19 @@ ALTER TABLE `tblprogram`
 -- AUTO_INCREMENT for table `tblsection`
 --
 ALTER TABLE `tblsection`
-  MODIFY `sectionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `sectionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tblteachingassignment`
 --
 ALTER TABLE `tblteachingassignment`
-  MODIFY `assignmentid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `assignmentid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Constraints for dumped tables
