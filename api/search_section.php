@@ -17,18 +17,20 @@ if ($q === '') {
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        $sectionId = (int) $row['sectionid'];
+        $deleteUrl = "managementsection.php?delete_section_id={$sectionId}";
+        $deleteUrlAttr = htmlspecialchars($deleteUrl, ENT_QUOTES, 'UTF-8');
         echo "<tr>";
         echo "<td>" . htmlspecialchars($row['sectionname']) . "</td>";
         echo "<td>" . htmlspecialchars($row['yearlevel']) . "</td>";
         echo "<td>" . htmlspecialchars($row['programname']) . "</td>";
-        // TODO: Add actions for edit and delete with proper links or data attributes
         echo "<td>
-                <a class='btn-edit' style='text-decoration: none;'>Edit</a>
+                <a class='btn-edit' href='registersection.php?sectionid={$sectionId}' style='text-decoration: none;'>Edit</a>
                 <span class='action-sep'>|</span>
-                <a class='btn-delete'>Delete</a>
+                <a class='btn-delete js-delete-section' href='{$deleteUrlAttr}' data-delete-url='{$deleteUrlAttr}'>Delete</a>
             </td>";
         echo "</tr>";
     }
 } else {
-    echo "<tr><td colspan='5'>No courses found.</td></tr>";
+    echo "<tr><td colspan='4'>No sections found.</td></tr>";
 }

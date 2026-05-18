@@ -20,6 +20,7 @@ $errors = [];
 <link rel="stylesheet" href="assets/css/variables.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/formtemplate.css">
+<link rel="stylesheet" href="assets/css/registerLoad.css">
 
 <div class="main-wrapper">
 
@@ -136,116 +137,21 @@ $errors = [];
 
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const yearSelect = document.querySelector('select[name="year_level"]');
-        const sectionSelect = document.querySelector('select[name="section"]');
-        const courseSelect = document.querySelector('select[name="course_code"]');
-        const schedulesContainer = document.getElementById('schedules_container');
-        const addScheduleBtn = document.getElementById('add_schedule_btn');
+<div class="confirm-overlay" id="confirmOverlay" aria-hidden="true">
+    <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+        <div class="confirm-header" id="confirmTitle">Confirm Workload Assignment</div>
+        <div class="confirm-body">
+            Please review the information before saving.
+            <ul class="confirm-list" id="confirmList"></ul>
+        </div>
+        <div class="confirm-actions">
+            <button type="button" class="confirm-btn cancel" id="confirmCancel">Cancel</button>
+            <button type="button" class="confirm-btn primary" id="confirmOk">Save</button>
+        </div>
+    </div>
+</div>
 
-        function setLoading(select) {
-            select.innerHTML = '<option value="">Loading...</option>';
-        }
-
-        function clearSelect(select, placeholder) {
-            select.innerHTML = '<option value="">' + placeholder + '</option>';
-        }
-
-        async function fetchSections(year) {
-            const res = await fetch('api/get_sections_by_year.php?year=' + encodeURIComponent(year));
-            if (!res.ok) return [];
-            return res.json();
-        }
-        async function fetchCourses(year) {
-            const res = await fetch('api/get_courses_by_year.php?year=' + encodeURIComponent(year));
-            if (!res.ok) return [];
-            return res.json();
-        }
-
-        async function updateOptions(year) {
-            if (!year) {
-                clearSelect(sectionSelect, 'Select Section');
-                clearSelect(courseSelect, 'Select Course');
-                return;
-            }
-            setLoading(sectionSelect);
-            setLoading(courseSelect);
-
-            try {
-                const [sections, courses] = await Promise.all([fetchSections(year), fetchCourses(year)]);
-
-                sectionSelect.innerHTML = '<option value="">Select Section</option>';
-                sections.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s.id;
-                    opt.textContent = s.text;
-                    sectionSelect.appendChild(opt);
-                });
-
-                courseSelect.innerHTML = '<option value="">Select Course</option>';
-                courses.forEach(c => {
-                    const opt = document.createElement('option');
-                    opt.value = c.id;
-                    opt.textContent = c.text;
-                    courseSelect.appendChild(opt);
-                });
-            } catch (err) {
-                clearSelect(sectionSelect, 'Select Section');
-                clearSelect(courseSelect, 'Select Course');
-                console.error(err);
-            }
-        }
-
-        yearSelect.addEventListener('change', function() {
-            updateOptions(this.value);
-        });
-
-        if (yearSelect.value) {
-            updateOptions(yearSelect.value);
-        }
-
-        function createScheduleRow() {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'schedule-row';
-            wrapper.style.display = 'flex';
-            wrapper.style.gap = '8px';
-            wrapper.style.flexWrap = 'wrap';
-            wrapper.style.alignItems = 'center';
-            wrapper.style.marginBottom = '8px';
-            wrapper.innerHTML = `
-                <select name="schedule_day[]" class="form-select" required>
-                    <option value="">Day</option>
-                    <option value="M">M</option>
-                    <option value="T">T</option>
-                    <option value="W">W</option>
-                    <option value="TH">TH</option>
-                    <option value="F">F</option>
-                    <option value="SAT">SAT</option>
-                    <option value="SUN">SUN</option>
-                </select>
-                <input type="time" name="schedule_start[]" class="form-input" required>
-                <input type="time" name="schedule_end[]" class="form-input" required>
-                <input type="text" name="schedule_roomtype[]" class="form-input" placeholder="Room Type">
-                <input type="text" name="schedule_building[]" class="form-input" placeholder="Building">
-                <input type="text" name="schedule_roomnumber[]" class="form-input" placeholder="Room #">
-                <button type="button" class="btn-remove-schedule" style="background:#eee;border:1px solid #ccc;padding:6px 8px;border-radius:4px;">Remove</button>
-            `;
-            return wrapper;
-        }
-
-        addScheduleBtn.addEventListener('click', function() {
-            schedulesContainer.appendChild(createScheduleRow());
-        });
-
-        schedulesContainer.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('btn-remove-schedule')) {
-                const row = e.target.closest('.schedule-row');
-                if (row) row.remove();
-            }
-        });
-    });
-</script>
+<script src="assets/js/registerLoad.js"></script>
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnAssign'])) {
@@ -276,14 +182,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnAssign'])) {
             $currentYear = intval(date('Y'));
             $schoolyear = $currentYear . '-' . ($currentYear + 1);
 
-
             // Insert teaching assignment (include teacher)
             $stmt = $connection->prepare("INSERT INTO tblteachingassignment (schoolyear, section, coursecodeid, teacherid) VALUES (?, ?, ?, ?)");
             if (!$stmt) {
                 throw new Exception('Prepare failed: ' . $connection->error);
             }
             $stmt->bind_param("ssii", $schoolyear, $sectionName, $course_id, $teacher);
-            $stmt->execute();
+            if (!$stmt->execute()) {
+                throw new Exception('Execute failed: ' . $stmt->error);
+            }
             $assignmentId = $connection->insert_id;
             $stmt->close();
 
@@ -326,6 +233,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnAssign'])) {
                 ];
             }
 
+            if (count($newSchedules) === 0) {
+                $errors[] = "Please add at least one complete schedule.";
+            }
+
             // Check for internal conflicts among the submitted schedules
             $hasInternalConflict = false;
             for ($i = 0; $i < count($newSchedules); $i++) {
@@ -346,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnAssign'])) {
             }
 
             // If internal conflicts found, rollback and stop
-            if ($hasInternalConflict) {
+            if ($hasInternalConflict || !empty($errors)) {
                 $connection->rollback();
             } else {
                 // Check DB conflicts for each new schedule: room, teacher, section
@@ -415,7 +326,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnAssign'])) {
                         }
                         foreach ($newSchedules as $ns) {
                             $schedStmt->bind_param("ssssssi", $ns['day'], $ns['start'], $ns['end'], $ns['roomtype'], $ns['building'], $ns['roomnumber'], $assignmentId);
-                            $schedStmt->execute();
+                            if (!$schedStmt->execute()) {
+                                throw new Exception('Execute failed: ' . $schedStmt->error);
+                            }
                         }
                         $schedStmt->close();
                     }

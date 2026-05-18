@@ -19,7 +19,8 @@ $pageTitle = "Course Management";
 <link rel="stylesheet" href="assets/css/variables.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/formtemplate.css">
-
+<link rel="stylesheet" href="assets/css/managementfaculty.css">
+<link rel="stylesheet" href="assets/css/managementcourse.css">
 
 <div class="main-wrapper">
     <?php require_once 'assets/includes/topbar.php'; ?>
@@ -52,10 +53,26 @@ $pageTitle = "Course Management";
 
                     <tbody id="course-table-body">
                         <?php
-                        $sql = "SELECT * FROM tblcourse";
+                        // Pagination setup
+                        $limit = 10;
+                        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+
+                        // get total rows for pagination
+                        $count_sql = "SELECT COUNT(*) AS total FROM tblcourse";
+                        $count_result = $connection->query($count_sql);
+                        $total_rows = 0;
+                        if ($count_result) {
+                            $count_row = $count_result->fetch_assoc();
+                            $total_rows = (int) $count_row['total'];
+                        }
+                        $total_pages = ($total_rows > 0) ? ceil($total_rows / $limit) : 1;
+                        $offset = ($page - 1) * $limit;
+
+                        // fetch paginated results
+                        $sql = "SELECT * FROM tblcourse ORDER BY coursecode LIMIT $limit OFFSET $offset";
                         $result = $connection->query($sql);
 
-                        if ($result->num_rows > 0) {
+                        if ($result && $result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";
                                 echo "<td>" . $row['coursecode'] . "</td>";
@@ -63,12 +80,14 @@ $pageTitle = "Course Management";
                                 echo "<td>" . $row['units'] . "</td>";
                                 echo "<td>" . $row['year_level'] . "</td>";
 
-                                $courseId = urlencode($row['coursecodeid']);
+                                $courseId = (int) $row['coursecodeid'];
+                                $deleteUrl = "managementcourse.php?delete_course_id={$courseId}";
+                                $deleteUrlAttr = htmlspecialchars($deleteUrl, ENT_QUOTES, 'UTF-8');
                                 echo "<td>
-                                    <a href='registercourse.php?id={$courseId}' class='btn-edit' style='text-decoration: none;'>Edit</a>
-                                    <span class='action-sep'>|</span>
-                                    <a class='btn-delete'>Delete</a>
-                                  </td>";
+                                                                        <a href='registercourse.php?id={$courseId}' class='btn-edit' style='text-decoration: none;'>Edit</a>
+                                                                        <span class='action-sep'>|</span>
+                                                                        <a href='{$deleteUrlAttr}' class='btn-delete js-delete-course' data-delete-url='{$deleteUrlAttr}'>Delete</a>
+                                                                    </td>";
                                 echo "</tr>";
                             }
                         } else {
@@ -77,30 +96,69 @@ $pageTitle = "Course Management";
                         ?>
                     </tbody>
                 </table>
+
+                <?php if (isset($total_pages) && $total_pages > 1): ?>
+                    <nav class="pagination" aria-label="Course pagination">
+                        <?php if ($page > 1): ?>
+                            <a class="pagination-link" href="managementcourse.php?page=<?php echo $page - 1; ?>">« Prev</a>
+                        <?php endif; ?>
+
+                        <?php
+                        $start = max(1, $page - 2);
+                        $end = min($total_pages, $page + 2);
+
+                        if ($start > 1) {
+                            echo '<a class="pagination-link" href="managementcourse.php?page=1">1</a>';
+                            if ($start > 2) echo '<span class="ellipsis">...</span>';
+                        }
+
+                        for ($p = $start; $p <= $end; $p++) {
+                            if ($p == $page) {
+                                echo '<span class="pagination-link current">' . $p . '</span>';
+                            } else {
+                                echo '<a class="pagination-link" href="managementcourse.php?page=' . $p . '">' . $p . '</a>';
+                            }
+                        }
+
+                        if ($end < $total_pages) {
+                            if ($end < $total_pages - 1) echo '<span class="ellipsis">...</span>';
+                            echo '<a class="pagination-link" href="managementcourse.php?page=' . $total_pages . '">' . $total_pages . '</a>';
+                        }
+                        ?>
+
+                        <?php if ($page < $total_pages): ?>
+                            <a class="pagination-link" href="managementcourse.php?page=<?php echo $page + 1; ?>">Next »</a>
+                        <?php endif; ?>
+                    </nav>
+                <?php endif; ?>
             </div>
         </div>
     </main>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const input = document.getElementById('course-search');
-        const tbody = document.getElementById('course-table-body');
-        let timer = null;
 
-        async function doSearch(q) {
-            try {
-                const res = await fetch(`api/search_course.php?q=${encodeURIComponent(q)}`);
-                if (!res.ok) throw new Error('Network error');
-                tbody.innerHTML = await res.text();
-            } catch (err) {
-                console.error(err);
-            }
-        }
+<div class="modal-backdrop" id="delete-course-modal" aria-hidden="true" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="delete-course-title" aria-describedby="delete-course-desc">
+        <h3 id="delete-course-title">Delete course?</h3>
+        <p id="delete-course-desc">This action removes the course and cannot be undone.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-cancel" data-m:qodal-cancel=":q">Cancel</button>
+            <a href="#" class="btn-confirm" data-modal-confirm>Yes, delete</a>
+        </div>
+    </div>
+</div>
 
-        input.addEventListener('input', (e) => {
-            const q = e.target.value.trim();
-            clearTimeout(timer);
-            timer = setTimeout(() => doSearch(q), 300); // 300ms debounce
-        });
-    });
-</script>
+<script src="assets/js/managementcourse.js"></script>
+
+<?php
+if (isset($_GET['delete_course_id']) && ctype_digit($_GET['delete_course_id'])) {
+    $courseId = (int) $_GET['delete_course_id'];
+
+    $deleteStmt = $connection->prepare("DELETE FROM tblcourse WHERE coursecodeid = ?");
+    $deleteStmt->bind_param("i", $courseId);
+    $deleteStmt->execute();
+    $deleteStmt->close();
+
+    echo "<script>window.location.href = 'managementcourse.php';</script>";
+    exit();
+}
+?>

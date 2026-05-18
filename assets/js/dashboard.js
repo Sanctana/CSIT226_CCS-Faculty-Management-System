@@ -19,33 +19,74 @@ document.addEventListener("DOMContentLoaded", function () {
     "December",
   ];
 
-  mon.innerText = `${months[now.getMonth()]} ${now.getFullYear()}`;
+  if (grid && mon) {
+    mon.innerText = `${months[now.getMonth()]} ${now.getFullYear()}`;
 
-  const days = ["S", "M", "T", "W", "T", "F", "S"];
+    const days = ["S", "M", "T", "W", "T", "F", "S"];
 
-  days.forEach((d) => {
-    const div = document.createElement("div");
-    div.className = "cal-h";
-    div.innerText = d;
-    grid.appendChild(div);
-  });
+    days.forEach((d) => {
+      const div = document.createElement("div");
+      div.className = "cal-h";
+      div.innerText = d;
+      grid.appendChild(div);
+    });
 
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
-  for (let i = 0; i < daysInMonth; i++) {
-    grid.appendChild(document.createElement("div"));
-  }
-
-  for (let i = 1; i <= lastDay; i++) {
-    const d = document.createElement("div");
-    d.className = "cal-d";
-
-    if (i === now.getDate()) {
-      d.classList.add("act");
+    for (let i = 0; i < daysInMonth; i++) {
+      grid.appendChild(document.createElement("div"));
     }
 
-    d.innerText = i;
-    grid.appendChild(d);
+    for (let i = 1; i <= lastDay; i++) {
+      const d = document.createElement("div");
+      d.className = "cal-d";
+
+      if (i === now.getDate()) {
+        d.classList.add("act");
+      }
+
+      d.innerText = i;
+      grid.appendChild(d);
+    }
+  }
+
+  const modal = document.getElementById("delete-modal");
+  const confirmBtn = modal ? modal.querySelector("[data-modal-confirm]") : null;
+  const cancelBtn = modal ? modal.querySelector("[data-modal-cancel]") : null;
+  const deleteLinks = document.querySelectorAll(".js-delete-schedule");
+
+  if (modal && confirmBtn && cancelBtn && deleteLinks.length) {
+    const closeModal = () => {
+      modal.classList.remove("is-visible");
+      modal.setAttribute("aria-hidden", "true");
+      confirmBtn.setAttribute("href", "#");
+    };
+
+    deleteLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const deleteUrl = link.getAttribute("data-delete-url");
+        if (!deleteUrl) {
+          return;
+        }
+        confirmBtn.setAttribute("href", deleteUrl);
+        modal.classList.add("is-visible");
+        modal.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    cancelBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modal.classList.contains("is-visible")) {
+        closeModal();
+      }
+    });
   }
 });

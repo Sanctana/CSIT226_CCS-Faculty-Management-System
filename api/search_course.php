@@ -19,11 +19,13 @@ if ($result && $result->num_rows > 0) {
 		echo "<td>" . htmlspecialchars($row['coursetitle']) . "</td>";
 		echo "<td>" . htmlspecialchars($row['units']) . "</td>";
 		echo "<td>" . htmlspecialchars($row['year_level']) . "</td>";
-		$courseId = urlencode($row['coursecodeid']);
+		$courseId = (int) $row['coursecodeid'];
+		$deleteUrl = "managementcourse.php?delete_course_id={$courseId}";
+		$deleteUrlAttr = htmlspecialchars($deleteUrl, ENT_QUOTES, 'UTF-8');
 		echo "<td>
-							<a href='registercourse.php?id={$courseId}' class='btn-edit' style='text-decoration: none;'>Edit</a>
-							<span class='action-sep'>|</span>
-							<a class='btn-delete'>Delete</a>
+						<a href='registercourse.php?id={$courseId}' class='btn-edit' style='text-decoration: none;'>Edit</a>
+						<span class='action-sep'>|</span>
+						<a href='{$deleteUrlAttr}' class='btn-delete js-delete-course' data-delete-url='{$deleteUrlAttr}'>Delete</a>
           </td>";
 		echo "</tr>";
 	}

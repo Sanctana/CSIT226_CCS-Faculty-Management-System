@@ -4,6 +4,14 @@ $pageTitle = "Dashboard";
 
 $isAdmin = $_SESSION['role']  === 'department_head';
 $schedules = [];
+$perPage = 10;
+$page = isset($_GET['page']) && ctype_digit($_GET['page']) ? (int) $_GET['page'] : 1;
+if ($page < 1) {
+    $page = 1;
+}
+$offset = ($page - 1) * $perPage;
+$totalSchedules = 0;
+$totalPages = 1;
 
 // Map day of week numbers to names
 $dayNames = [
@@ -16,64 +24,75 @@ $dayNames = [
     'SUN' => 'Sunday'
 ];
 
-if ($isAdmin) {
-    // Admin sees all schedules
-    $scheduleQuery = "
-        SELECT 
-            cs.scheduleid,
-            cs.dayofweek,
-            cs.starttime,
-            cs.endtime,
-            cs.roomtype,
-            cs.building,
-            cs.roomnumber,
-            c.coursetitle,
-            c.coursecode,
-            u.firstname,
-            u.lastname,
-            ta.schoolyear,
-            ta.section
-        FROM tblcourseschedule cs
-        JOIN tblteachingassignment ta ON cs.assignmentid = ta.assignmentid
-        JOIN tblcourse c ON ta.coursecodeid = c.coursecodeid
-        JOIN tblfaculty f ON ta.teacherid = f.id
-        JOIN tbluser u ON f.id = u.id
-        ORDER BY cs.dayofweek, cs.starttime
-    ";
-} else {
-    // Faculty sees only their own schedules
-    $currentUserId = $_SESSION['user_id'] ?? 0;
-    $scheduleQuery = "
-        SELECT 
-            cs.scheduleid,
-            cs.dayofweek,
-            cs.starttime,
-            cs.endtime,
-            cs.roomtype,
-            cs.building,
-            cs.roomnumber,
-            c.coursetitle,
-            c.coursecode,
-            u.firstname,
-            u.lastname,
-            ta.schoolyear,
-            ta.section
-        FROM tblcourseschedule cs
-        JOIN tblteachingassignment ta ON cs.assignmentid = ta.assignmentid 
-        JOIN tblcourse c ON ta.coursecodeid = c.coursecodeid
-        JOIN tblfaculty f ON ta.teacherid = f.id
-        JOIN tbluser u ON f.id = u.id
-        WHERE ta.teacherid = $currentUserId
-        ORDER BY cs.dayofweek, cs.starttime
-    ";
+$currentUserId = $_SESSION['user_id'] ?? 0;
+$whereSql = $isAdmin ? '' : 'WHERE ta.teacherid = ?';
+
+$countSql = "
+    SELECT COUNT(*) AS total
+    FROM tblcourseschedule cs
+    JOIN tblteachingassignment ta ON cs.assignmentid = ta.assignmentid
+    JOIN tblcourse c ON ta.coursecodeid = c.coursecodeid
+    JOIN tblfaculty f ON ta.teacherid = f.id
+    JOIN tbluser u ON f.id = u.id
+    $whereSql
+";
+
+$countStmt = $connection->prepare($countSql);
+if (!$isAdmin) {
+    $countStmt->bind_param("i", $currentUserId);
+}
+$countStmt->execute();
+$countResult = $countStmt->get_result();
+if ($countResult && ($countRow = $countResult->fetch_assoc())) {
+    $totalSchedules = (int) $countRow['total'];
+}
+$countStmt->close();
+
+$totalPages = max(1, (int) ceil($totalSchedules / $perPage));
+if ($page > $totalPages) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $perPage;
 }
 
-$scheduleResult = $connection->query($scheduleQuery);
+$scheduleSql = "
+    SELECT 
+        cs.scheduleid,
+        cs.dayofweek,
+        cs.starttime,
+        cs.endtime,
+        cs.roomtype,
+        cs.building,
+        cs.roomnumber,
+        c.coursetitle,
+        c.coursecode,
+        u.firstname,
+        u.lastname,
+        ta.schoolyear,
+        ta.section
+    FROM tblcourseschedule cs
+    JOIN tblteachingassignment ta ON cs.assignmentid = ta.assignmentid
+    JOIN tblcourse c ON ta.coursecodeid = c.coursecodeid
+    JOIN tblfaculty f ON ta.teacherid = f.id
+    JOIN tbluser u ON f.id = u.id
+    $whereSql
+    ORDER BY cs.dayofweek, cs.starttime
+    LIMIT ? OFFSET ?
+";
+
+$scheduleStmt = $connection->prepare($scheduleSql);
+if ($isAdmin) {
+    $scheduleStmt->bind_param("ii", $perPage, $offset);
+} else {
+    $scheduleStmt->bind_param("iii", $currentUserId, $perPage, $offset);
+}
+$scheduleStmt->execute();
+$scheduleResult = $scheduleStmt->get_result();
 if ($scheduleResult) {
     while ($row = $scheduleResult->fetch_assoc()) {
         $schedules[] = $row;
     }
 }
+$scheduleStmt->close();
 ?>
 
 <meta charset="UTF-8">
@@ -97,7 +116,7 @@ if ($scheduleResult) {
     <main class="content-body">
         <div class="container">
             <!-- Welcome Section -->
-            <div class="welcome-text">
+            <div class="welcome-text">>
                 <h1>Welcome Back, <span><?php echo htmlspecialchars($_SESSION['firstname']); ?></span></h1>
                 <p>Here are your quick actions for managing the department.</p>
             </div>
@@ -168,17 +187,42 @@ if ($scheduleResult) {
                                     <?php if ($isAdmin): ?>
                                         <div class="schedule-card-actions">
                                             <a href="editschedule.php?id=<?php echo (int) $schedule['scheduleid']; ?>" class="btn-edit">Edit</a>
-                                            <a href="dashboard.php?delete_schedule_id=<?php echo (int) $schedule['scheduleid']; ?>" class="btn-delete" onclick="return confirm('Are you sure you want to delete this schedule?');">Delete</a>
+                                            <a href="dashboard.php?delete_schedule_id=<?php echo (int) $schedule['scheduleid']; ?>" class="btn-delete js-delete-schedule" data-delete-url="dashboard.php?delete_schedule_id=<?php echo (int) $schedule['scheduleid']; ?>">Delete</a>
                                         </div>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
+
+                    <?php if ($totalPages > 1): ?>
+                        <div class="pagination">
+                            <a class="pagination-link" href="dashboard.php?page=<?php echo max(1, $page - 1); ?>" aria-disabled="<?php echo $page <= 1 ? 'true' : 'false'; ?>">
+                                Prev
+                            </a>
+                            <span class="pagination-info">
+                                Page <?php echo $page; ?> of <?php echo $totalPages; ?>
+                            </span>
+                            <a class="pagination-link" href="dashboard.php?page=<?php echo min($totalPages, $page + 1); ?>" aria-disabled="<?php echo $page >= $totalPages ? 'true' : 'false'; ?>">
+                                Next
+                            </a>
+                        </div>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>
     </main>
+</div>
+
+<div class="modal-backdrop" id="delete-modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title" aria-describedby="delete-modal-desc">
+        <h3 id="delete-modal-title">Delete schedule?</h3>
+        <p id="delete-modal-desc">This action removes the schedule and cannot be undone.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-cancel" data-modal-cancel>Cancel</button>
+            <a href="#" class="btn-confirm" data-modal-confirm>Yes, delete</a>
+        </div>
+    </div>
 </div>
 
 <?php
@@ -216,7 +260,6 @@ if ($isAdmin && isset($_GET['delete_schedule_id']) && ctype_digit($_GET['delete_
         }
     }
 
-    header('Location: dashboard.php');
+    echo "<script>window.location.href = 'dashboard.php';</script>";
     exit();
 }
-

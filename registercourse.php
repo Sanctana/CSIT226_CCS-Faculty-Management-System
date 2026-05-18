@@ -30,38 +30,6 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     }
 }
 
-if (isset($_POST['form_type']) && in_array($_POST['form_type'], ['course_registration', 'course_update'], true)) {
-    $formType = $_POST['form_type'];
-    $postedCourseId = isset($_POST['course_id']) && ctype_digit($_POST['course_id']) ? (int) $_POST['course_id'] : 0;
-
-    $coursecode = trim($_POST['coursecode'] ?? '');
-    $coursetitle = trim($_POST['coursetitle'] ?? '');
-    $units = (int) ($_POST['units'] ?? 0);
-    $yearlevel = (int) ($_POST['yearlevel'] ?? 0);
-
-    if ($formType === 'course_update' && $postedCourseId > 0) {
-        $isEditMode = true;
-        $courseId = $postedCourseId;
-
-        $stmt = $connection->prepare("UPDATE tblcourse SET coursecode = ?, coursetitle = ?, units = ?, year_level = ? WHERE coursecodeid = ?");
-        $stmt->bind_param("ssiii", $coursecode, $coursetitle, $units, $yearlevel, $courseId);
-        $isSaved = $stmt->execute();
-    } else {
-        $isEditMode = false;
-
-        $stmt = $connection->prepare("INSERT INTO tblcourse (coursecode, coursetitle, units, year_level) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssii", $coursecode, $coursetitle, $units, $yearlevel);
-        $isSaved = $stmt->execute();
-    }
-
-    if ($isSaved) {
-        header('Location: managementcourse.php');
-        exit();
-    }
-
-    $errorMessage = 'Failed to save course: ' . $connection->error;
-}
-
 $pageTitle = $isEditMode ? 'Edit Course' : 'Register Course';
 $formTitle = $isEditMode ? 'Edit Course' : 'Course Registration';
 $submitLabel = $isEditMode ? 'Update Course' : 'Register Course';
@@ -83,17 +51,14 @@ require_once 'assets/includes/sidebar.php';
 <link rel="stylesheet" href="assets/css/variables.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/formtemplate.css">
+<link rel="stylesheet" href="assets/css/registerLoad.css">
 
 <div class="main-wrapper">
     <?php require_once 'assets/includes/topbar.php'; ?>
 
     <main class="content-body">
         <div class="container">
-
-
             <div class="form-panel">
-
-
                 <div class="form-header">
                     <a href="managementcourse.php" class="back-icon">
                         <img src="assets/img/back.png" alt="Back">
@@ -104,9 +69,11 @@ require_once 'assets/includes/sidebar.php';
                 <div class="form-divider"></div>
 
                 <?php if ($errorMessage !== ''): ?>
-                    <div class="record-subtitle" style="color: #b42318; margin-bottom: 12px;">
+                    <div id="courseError" class="record-subtitle" style="color: #b42318; margin-bottom: 12px;">
                         <?php echo htmlspecialchars($errorMessage); ?>
                     </div>
+                <?php else: ?>
+                    <div id="courseError" class="record-subtitle" style="color: #b42318; margin-bottom: 12px; display: none;"></div>
                 <?php endif; ?>
 
 
@@ -151,5 +118,76 @@ require_once 'assets/includes/sidebar.php';
 
 </div>
 
+<div id="confirmOverlay" class="confirm-overlay" aria-hidden="true">
+    <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+        <div class="confirm-header" id="confirmTitle">Confirm Course Details</div>
+        <div class="confirm-body">
+            <p>Review the details before saving.</p>
+            <ul id="confirmList" class="confirm-list"></ul>
+        </div>
+        <div class="confirm-actions">
+            <button type="button" id="confirmCancel" class="confirm-btn cancel">Cancel</button>
+            <button type="button" id="confirmOk" class="confirm-btn primary">Confirm</button>
+        </div>
+    </div>
+</div>
 
-<?php  
+<script src="assets/js/registercourse.js" defer></script>
+
+
+<?php
+
+if (isset($_POST['form_type']) && in_array($_POST['form_type'], ['course_registration', 'course_update'], true)) {
+    $formType = $_POST['form_type'];
+    $postedCourseId = isset($_POST['course_id']) && ctype_digit($_POST['course_id']) ? (int) $_POST['course_id'] : 0;
+
+    $coursecode = trim($_POST['coursecode'] ?? '');
+    $coursetitle = trim($_POST['coursetitle'] ?? '');
+    $units = (int) ($_POST['units'] ?? 0);
+    $yearlevel = (int) ($_POST['yearlevel'] ?? 0);
+
+    $isSaved = false;
+
+    if ($formType === 'course_update' && $postedCourseId > 0) {
+        $isEditMode = true;
+        $courseId = $postedCourseId;
+
+        $stmt = $connection->prepare("UPDATE tblcourse SET coursecode = ?, coursetitle = ?, units = ?, year_level = ? WHERE coursecodeid = ?");
+        if ($stmt) {
+            $stmt->bind_param("ssiii", $coursecode, $coursetitle, $units, $yearlevel, $courseId);
+            $isSaved = $stmt->execute();
+            if (!$isSaved) {
+                $errorMessage = 'Failed to save course: ' . $stmt->error;
+            }
+            $stmt->close();
+        } else {
+            $errorMessage = 'Failed to save course: ' . $connection->error;
+        }
+    } else {
+        $isEditMode = false;
+
+        $stmt = $connection->prepare("INSERT INTO tblcourse (coursecode, coursetitle, units, year_level) VALUES (?, ?, ?, ?)");
+        if ($stmt) {
+            $stmt->bind_param("ssii", $coursecode, $coursetitle, $units, $yearlevel);
+            $isSaved = $stmt->execute();
+            if (!$isSaved) {
+                $errorMessage = 'Failed to save course: ' . $stmt->error;
+            }
+            $stmt->close();
+        } else {
+            $errorMessage = 'Failed to save course: ' . $connection->error;
+        }
+    }
+
+    if ($isSaved) {
+        echo "<script>window.location.href='managementcourse.php';</script>";
+        exit();
+    }
+
+    if ($errorMessage === '') {
+        $errorMessage = 'Failed to save course.';
+    }
+
+    $encodedError = json_encode($errorMessage, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+    echo "<script>(function(){var el=document.getElementById('courseError');if(el){el.textContent={$encodedError};el.style.display='block';}})();</script>";
+}
